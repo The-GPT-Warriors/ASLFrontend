@@ -1,0 +1,63 @@
+body {
+    background: rgba(255, 255, 255, 0.01), url('https://github.com/TayKimmy/CSA_Repo/assets/107821010/7ec036ea-c986-4ddb-8657-3665bcb63ed6') no-repeat center center fixed;
+    background-size: cover;
+    color: white;
+    font-family: Arial, sans-serif;
+  }
+  
+  header {
+    text-align: center;
+    padding: 50px;
+  }
+  
+  h1 {
+    font-size: 36px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin: 0;
+  }
+  
+  .container {
+    background-color: rgba(0, 0, 0, 0.5); 
+    padding: 20px;
+    border-radius: 10px;
+    margin: 20px;
+  }
+  
+  p {
+    font-size: 18px;
+    line-height: 1.5;
+  }
+  
+  .stars {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+  }
+  
+  .stars:before {
+    content: " ";
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 2px;
+    height: 2px;
+    background: white;
+    animation: twinkle 2s infinite;
+  }
+  
+  @keyframes twinkle {
+    0% {
+      opacity: 0;
+    }
+    50% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 0;
+    }
+  }
+  
