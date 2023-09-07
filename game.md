@@ -3,3 +3,126 @@ layout: default
 title: Game
 permalink: /game
 ---
+<html>
+<head>
+    <title>Space Invaders</title>
+    <style>
+        canvas {
+            background-color: black;
+            display: block;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="gameCanvas" width="400" height="400"></canvas>
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        const player = {
+            x: canvas.width / 2,
+            y: canvas.height - 30,
+            width: 30,
+            height: 30,
+            speed: 5
+        };
+        const bullets = [];
+        const enemy = {
+            x: canvas.width / 2,
+            y: 10,
+            width: 30,
+            height: 30,
+            speed: 2
+        };
+        let isGameOver = false;
+        function drawPlayer() {
+            ctx.beginPath();
+            ctx.rect(player.x, player.y, player.width, player.height);
+            ctx.fillStyle = "blue";
+            ctx.fill();
+            ctx.closePath();
+        }
+        function drawEnemy() {
+            ctx.beginPath();
+            ctx.rect(enemy.x, enemy.y, enemy.width, enemy.height);
+            ctx.fillStyle = "red";
+            ctx.fill();
+            ctx.closePath();
+        }
+        function drawBullets() {
+            for (let i = 0; i < bullets.length; i++) {
+                ctx.beginPath();
+                ctx.rect(bullets[i].x, bullets[i].y, bullets[i].width, bullets[i].height);
+                ctx.fillStyle = "white";
+                ctx.fill();
+                ctx.closePath();
+            }
+        }
+        function moveBullets() {
+            for (let i = 0; i < bullets.length; i++) {
+                bullets[i].y -= 5;
+                if (bullets[i].y < 0) {
+                    bullets.splice(i, 1);
+                }
+            }
+        }
+        function checkCollision() {
+            if (
+                player.x < enemy.x + enemy.width &&
+                player.x + player.width > enemy.x &&
+                player.y < enemy.y + enemy.height &&
+                player.y + player.height > enemy.y
+            ) {
+                isGameOver = true;
+            }
+            for (let i = 0; i < bullets.length; i++) {
+                if (
+                    bullets[i].x < enemy.x + enemy.width &&
+                    bullets[i].x + bullets[i].width > enemy.x &&
+                    bullets[i].y < enemy.y + enemy.height &&
+                    bullets[i].y + bullets[i].height > enemy.y
+                ) {
+                    enemy.x = Math.random() * (canvas.width - enemy.width);
+                    enemy.y = 10;
+                    bullets.splice(i, 1);
+                }
+            }
+        }
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            if (!isGameOver) {
+                drawPlayer();
+                drawEnemy();
+                drawBullets();
+                moveBullets();
+                checkCollision();
+                requestAnimationFrame(draw);
+            } else {
+                ctx.font = "30px Arial";
+                ctx.fillStyle = "white";
+                ctx.fillText("Game Over", canvas.width / 2 - 80, canvas.height / 2);
+            }
+        }
+        function keyDownHandler(e) {
+            if (e.key == "Right" || e.key == "ArrowRight") {
+                if (player.x + player.width < canvas.width) {
+                    player.x += player.speed;
+                }
+            } else if (e.key == "Left" || e.key == "ArrowLeft") {
+                if (player.x > 0) {
+                    player.x -= player.speed;
+                }
+            } else if (e.key == " ") {
+                bullets.push({
+                    x: player.x + player.width / 2 - 2.5,
+                    y: player.y,
+                    width: 5,
+                    height: 10
+                });
+            }
+        }
+        document.addEventListener("keydown", keyDownHandler, false);
+        draw();
+    </script>
+</body>
+</html>
