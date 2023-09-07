@@ -14,9 +14,10 @@ permalink: /plans
 
 ## Tay's Plans
 - Add CSS styling in the homepage and the header
-- Implement drafat of game code into the website and add it to the header
+- Implement draft of game code into the website and add it to the header
 
 ---
 
 ## Ethan's Plans
-- 
+- Code a baseline for the game
+- Start work on scoring system to track player scores
