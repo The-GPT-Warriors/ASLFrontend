@@ -5,7 +5,7 @@ permalink: /game
 ---
 <html>
 <head>
-    <title>Space Invaders</title>
+    <title>Cosmic Carnage</title>
     <style>
         canvas {
             background-color: black;
@@ -35,10 +35,11 @@ permalink: /game
             speed: 2
         };
         let isGameOver = false;
+        let score = 0; // Initialize the score variable
         function drawPlayer() {
             ctx.beginPath();
             ctx.rect(player.x, player.y, player.width, player.height);
-            ctx.fillStyle = "blue";
+            ctx.fillStyle = "purple";
             ctx.fill();
             ctx.closePath();
         }
@@ -53,7 +54,7 @@ permalink: /game
             for (let i = 0; i < bullets.length; i++) {
                 ctx.beginPath();
                 ctx.rect(bullets[i].x, bullets[i].y, bullets[i].width, bullets[i].height);
-                ctx.fillStyle = "white";
+                ctx.fillStyle = "orange";
                 ctx.fill();
                 ctx.closePath();
             }
@@ -85,6 +86,7 @@ permalink: /game
                     enemy.x = Math.random() * (canvas.width - enemy.width);
                     enemy.y = 10;
                     bullets.splice(i, 1);
+                    score += 1; // Increment the score when an enemy is hit
                 }
             }
         }
@@ -97,10 +99,15 @@ permalink: /game
                 moveBullets();
                 checkCollision();
                 requestAnimationFrame(draw);
+                // Display the score on the canvas
+                ctx.font = "20px Arial";
+                ctx.fillStyle = "white";
+                ctx.fillText("Score: " + score, 10, 30);
             } else {
                 ctx.font = "30px Arial";
-                ctx.fillStyle = "white";
+                ctx.fillStyle = "red";
                 ctx.fillText("Game Over", canvas.width / 2 - 80, canvas.height / 2);
+                ctx.fillText("Score: " + score, canvas.width / 2 - 60, canvas.height / 2 + 40);
             }
         }
         function keyDownHandler(e) {
