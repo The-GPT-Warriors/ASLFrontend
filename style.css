@@ -1,0 +1,89 @@
+body {
+    background: url('https://github.com/TayKimmy/CSA_Repo/assets/107821010/7ec036ea-c986-4ddb-8657-3665bcb63ed6') no-repeat center bottom fixed;
+    background-size: cover;
+    color: white;
+    font-family: Arial, sans-serif;
+  }
+
+  ul.navbar {
+    background: url('https://github.com/TayKimmy/CSA_Repo/assets/107821010/7ec036ea-c986-4ddb-8657-3665bcb63ed6') no-repeat center bottom fixed;
+    background-size: cover;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 6rem;
+    position: relative;
+    list-style: none;
+  }
+  
+  ul.navbar::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 1rem;
+    background: url('https://github.com/TayKimmy/CSA_Repo/assets/107821010/7ec036ea-c986-4ddb-8657-3665bcb63ed6') no-repeat center bottom fixed; 
+    background-size: cover;
+  }
+  
+  li.nav-item {
+    float: left;
+    margin: 0;
+  }
+  
+  ul.navbar a {
+    color: #4b04f1;
+    text-decoration: none;
+    font-weight: bold;
+    margin: 0 20px;
+  }
+  
+  ul.navbar a:hover {
+    color: #ff0080;
+  }
+  
+.container {
+    background-color: rgba(0, 0, 0, 0.5); 
+    padding: 20px;
+    border-radius: 10px;
+    margin: 20px;
+  }
+  
+p {
+    font-size: 18px;
+    line-height: 1.5;
+  }
+  
+.stars {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+  }
+  
+.stars:before {
+    content: " ";
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 2px;
+    height: 2px;
+    background: white;
+    animation: twinkle 2s infinite;
+  }
+  
+@keyframes twinkle {
+    0% {
+      opacity: 0;
+    }
+    50% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 0;
+    }
+  }
+  
