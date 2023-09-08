@@ -60,39 +60,42 @@ permalink: /game
                 });
         }
         fetchPlayerData();
-        const canvas = document.getElementById('gameCanvas');
-        const ctx = canvas.getContext('2d');
-        const player = {
+        const canvas = document.getElementById('gameCanvas'); // create canvas element
+        const ctx = canvas.getContext('2d'); // get 2d rendering context of canvas
+        const player = { // define player properties
             x: canvas.width / 2,
-            y: canvas.height - 30,
-            width: 30,
-            height: 30,
+            y: canvas.height - 40,
+            width: 40,
+            height: 40,
             speed: 5
         };
-        const bullets = [];
-        const enemy = {
+        const bullets = []; // create an array to store bullets
+        const enemy = { // define enemy properties
             x: canvas.width / 2,
-            y: 10,
-            width: 30,
-            height: 30,
+            y: 0,
+            width: 40,
+            height: 40,
             speed: 2
         };
         let isGameOver = false;
-        let score = 0; // Initialize the score variable
-        let timeLeft = 30; // 30 seconds timer
+        let score = 0;
+        let timeLeft = 30;
         const playerImage = new Image();
-        playerImage.src = 'https://github.com/TayKimmy/CSA_Repo/assets/107821010/28c3e277-b292-43f0-bcef-5460b19689b7';
+        playerImage.src = 'https://github.com/TayKimmy/CSA_Repo/assets/107821010/28c3e277-b292-43f0-bcef-5460b19689b7'; // making the player a spaceship image
         const enemyImage = new Image();
-        enemyImage.src = 'https://github.com/TayKimmy/CSA_Repo/assets/107821010/89f4c0d6-a856-4233-bc17-ea8821bc7a10'; 
+        enemyImage.src = 'https://github.com/TayKimmy/CSA_Repo/assets/107821010/89f4c0d6-a856-4233-bc17-ea8821bc7a10'; // making the enemy a ufo image
         playerImage.onload = () => {
-            draw();
+            draw(); // execute draw() when the player's image is loaded
         };
+        // draw the player's spaceship
         function drawPlayer() {
             ctx.drawImage(playerImage, player.x, player.y, player.width, player.height);
         }
+        // draw the enemy's spaceship
         function drawEnemy() {
             ctx.drawImage(enemyImage, enemy.x, enemy.y, enemy.width, enemy.height);
         }
+        // draw bullets on the canvas
         function drawBullets() {
             for (let i = 0; i < bullets.length; i++) {
                 ctx.beginPath();
@@ -102,6 +105,7 @@ permalink: /game
                 ctx.closePath();
             }
         }
+        // move bullets upward
         function moveBullets() {
             for (let i = 0; i < bullets.length; i++) {
                 bullets[i].y -= 5;
@@ -110,8 +114,9 @@ permalink: /game
                 }
             }
         }
+        // check for collisions between player, bullets, and enemy
         function checkCollision() {
-            if (
+             if (
                 player.x < enemy.x + enemy.width &&
                 player.x + player.width > enemy.x &&
                 player.y < enemy.y + enemy.height &&
@@ -129,25 +134,26 @@ permalink: /game
                     enemy.x = Math.random() * (canvas.width - enemy.width);
                     enemy.y = 10;
                     bullets.splice(i, 1);
-                    score += 1; // Increment the score when an enemy is hit
+                    score += 1; // increment the score when an enemy is hit
                 }
             }
         }
+        // draw on the canvas
         function draw() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            if (!isGameOver && timeLeft > 0) {
+             ctx.clearRect(0, 0, canvas.width, canvas.height); // clear the canvas
+            if (!isGameOver && timeLeft > 0) { // if it is not game over and time is left
                 drawPlayer();
                 drawEnemy();
                 drawBullets();
                 moveBullets();
                 checkCollision();
                 requestAnimationFrame(draw);
-                // Display the score and time on the canvas
+                // display the score and time on the canvas
                 ctx.font = "20px Arial";
                 ctx.fillStyle = "white";
                 ctx.fillText("Score: " + score, 10, 30);
                 ctx.fillText("Time Left: " + timeLeft + "s", 10, 60);
-            } else if (!isGameOver && timeLeft === 0) {
+            } else if (!isGameOver && timeLeft === 0) { 
                 isGameOver = true;
                 ctx.font = "30px Arial";
                 ctx.fillStyle = "red";
@@ -160,33 +166,37 @@ permalink: /game
                 ctx.fillText("Score: " + score, canvas.width / 2 - 60, canvas.height / 2 + 40);
             }
         }
+        // function to handle user input (keyboard presses)
         function keyDownHandler(e) {
-            if (e.key == "Right" || e.key == "ArrowRight") {
-                if (player.x + player.width < canvas.width) {
-                    player.x += player.speed;
+            if (e.key == "Right" || e.key == "ArrowRight") { // if right key is pushed
+                if (player.x + player.width < canvas.width) { // if player is not on the very far right
+                    player.x += player.speed; // moving with defined speed in the right direction
                 }
-            } else if (e.key == "Left" || e.key == "ArrowLeft") {
-                if (player.x > 0) {
-                    player.x -= player.speed;
+            } else if (e.key == "Left" || e.key == "ArrowLeft") { // if left key is pushed
+                if (player.x > 0) { // if player is not on the very far left
+                    player.x -= player.speed; // moving with defined speed in left direction
                 }
-            } else if (e.key == " ") {
-                bullets.push({
-                    x: player.x + player.width / 2 - 2.5,
-                    y: player.y,
+            } else if (e.key == " ") { // if space is pushed
+                bullets.push({ // show bullets
+                    x: player.x + player.width / 2 - 2.5, // from the middle of the player's icon
+                    y: player.y, // from player's height
                     width: 5,
                     height: 10
                 });
             }
         }
+        // add keydown event listener to the document
         document.addEventListener("keydown", keyDownHandler, false);
+        // Initial call to the draw() function
         draw();
+        // Set up a timer interval to decrement timeLeft
         const timerInterval = setInterval(function() {
-            if (!isGameOver && timeLeft > 0) {
-                timeLeft--;
+            if (!isGameOver && timeLeft > 0) { // if time and game is not over
+                timeLeft--; // decrease time left
             } else {
-                clearInterval(timerInterval);
+                clearInterval(timerInterval); // clear interval if game is over
             }
-        }, 1000); // Decrease timeLeft by 1 second every 1000ms (1 second)
+        }, 1000); // 1000 ms - making sure it is every 1 second
     </script>
 </body>
 </html>

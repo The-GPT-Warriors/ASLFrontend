@@ -14,10 +14,12 @@ permalink: /plans
 
 ## Tay's Plans
 - Add CSS styling in the homepage and the header
-- Implement draft of game code into the website and add it to the header
+- Implement draft of game code into the website and add a timer - change images to spaceships
+- Add ChatGPT Review
 
 ---
 
 ## Ethan's Plans
 - Code a baseline for the game
 - Start work on backend API to store usernames and scores
+- Work on Create() function so that users are created when they play the game
