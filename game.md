@@ -162,19 +162,19 @@ permalink: /game
         };
         let isGameOver = false;
         let score = 0; // Initialize the score variable
+        let timeLeft = 30; // 30 seconds timer
+        const playerImage = new Image();
+        playerImage.src = 'https://github.com/TayKimmy/CSA_Repo/assets/107821010/28c3e277-b292-43f0-bcef-5460b19689b7';
+        const enemyImage = new Image();
+        enemyImage.src = 'https://github.com/TayKimmy/CSA_Repo/assets/107821010/89f4c0d6-a856-4233-bc17-ea8821bc7a10'; 
+        playerImage.onload = () => {
+            draw();
+        };
         function drawPlayer() {
-            ctx.beginPath();
-            ctx.rect(player.x, player.y, player.width, player.height);
-            ctx.fillStyle = "purple";
-            ctx.fill();
-            ctx.closePath();
+            ctx.drawImage(playerImage, player.x, player.y, player.width, player.height);
         }
         function drawEnemy() {
-            ctx.beginPath();
-            ctx.rect(enemy.x, enemy.y, enemy.width, enemy.height);
-            ctx.fillStyle = "red";
-            ctx.fill();
-            ctx.closePath();
+            ctx.drawImage(enemyImage, enemy.x, enemy.y, enemy.width, enemy.height);
         }
         function drawBullets() {
             for (let i = 0; i < bullets.length; i++) {
@@ -218,17 +218,24 @@ permalink: /game
         }
         function draw() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-            if (!isGameOver) {
+            if (!isGameOver && timeLeft > 0) {
                 drawPlayer();
                 drawEnemy();
                 drawBullets();
                 moveBullets();
                 checkCollision();
                 requestAnimationFrame(draw);
-                // Display the score on the canvas
+                // Display the score and time on the canvas
                 ctx.font = "20px Arial";
                 ctx.fillStyle = "white";
                 ctx.fillText("Score: " + score, 10, 30);
+                ctx.fillText("Time Left: " + timeLeft + "s", 10, 60);
+            } else if (!isGameOver && timeLeft === 0) {
+                isGameOver = true;
+                ctx.font = "30px Arial";
+                ctx.fillStyle = "red";
+                ctx.fillText("Time's Up!", canvas.width / 2 - 80, canvas.height / 2);
+                ctx.fillText("Score: " + score, canvas.width / 2 - 60, canvas.height / 2 + 40);
             } else {
                 ctx.font = "30px Arial";
                 ctx.fillStyle = "red";
@@ -256,6 +263,13 @@ permalink: /game
         }
         document.addEventListener("keydown", keyDownHandler, false);
         draw();
+        const timerInterval = setInterval(function() {
+            if (!isGameOver && timeLeft > 0) {
+                timeLeft--;
+            } else {
+                clearInterval(timerInterval);
+            }
+        }, 1000); // Decrease timeLeft by 1 second every 1000ms (1 second)
     </script>
 </body>
 </html>
