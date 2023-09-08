@@ -8,9 +8,48 @@ permalink: /game
     <title>Cosmic Carnage</title>
     <style>
         canvas {
-            background-color: black;
-            display: block;
-            margin: 0 auto;
+        background-color: black;
+        display: block;
+        margin: 0 auto;
+    }
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+        h1 {
+            text-align: center;
+        }
+        #createPlayerForm {
+            background-color: #fff;
+            border-radius: 5px;
+            padding: 20px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+        label {
+            font-weight: bold;
+        }
+        input[type="text"],
+        input[type="number"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        input[type="submit"] {
+            background-color: grey;
+            color: black;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
         }
     </style>
 </head>
@@ -29,6 +68,16 @@ permalink: /game
                 <th>Score</th>
             </tr>
         </thead>
+    <h1>Create Player</h1>
+    <form id="createPlayerForm">
+        <label for="user">Username:</label>
+        <input type="text" id="user" name="user" required>
+        <br>
+        <label for="score">Score:</label>
+        <input type="number" id="score" name="score" required>
+        <br>
+        <input type="submit" value="Submit">
+    </form>
         <tbody id="player-list">
             <!-- Player data will be inserted here -->
         </tbody>
@@ -60,9 +109,43 @@ permalink: /game
                 });
         }
         fetchPlayerData();
-        const canvas = document.getElementById('gameCanvas'); // create canvas element
-        const ctx = canvas.getContext('2d'); // get 2d rendering context of canvas
-        const player = { // define player properties
+        document.getElementById("createPlayerForm").addEventListener("submit", function (e) {
+            e.preventDefault();
+            const user = document.getElementById("user").value;
+            const score = parseInt(document.getElementById("score").value);
+            // Create a player object
+            const playerData = {
+                user: user,
+                score: score
+            };
+            fetch('http://172.31.132.100:8086/api/players/create', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(playerData),
+            })
+            .then(response => {
+                if (response.status === 201) {
+                    return response.json(); // Successfully created a player
+                } else {
+                    return response.json().then(errorData => {
+                        throw new Error(errorData.message);
+                    });
+                }
+            })
+            .then(player => {
+                // Display a success message or redirect to another page
+                document.getElementById("message").innerHTML = `Player ${player.user} created with score ${player.score}`;
+            })
+            .catch(error => {
+                // Display an error message
+                document.getElementById("message").innerHTML = `Error: ${error.message}`;
+            });
+        });
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        const player = {
             x: canvas.width / 2,
             y: canvas.height - 40,
             width: 40,
