@@ -23,7 +23,26 @@
     // Creates smooth animation effect
     transition: all 0.5s; 
   }
-
+    /* Style for the table */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      border: 2px solid white;
+      border-radius: 10px;
+  }
+  /* Style for table headers */
+  th {
+      background-color: black;
+      color: white;
+      padding: 8px;
+  }
+  /* Style for table cells */
+  td {
+      border: 1px solid black;
+      padding: 8px;
+      text-align: center;
+      color: white;
+  }
   /* define class for redifined button */
   .button {
     @include button;
