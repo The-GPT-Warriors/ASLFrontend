@@ -16,6 +16,20 @@ permalink: /game
 </head>
 <body>
     <canvas id="gameCanvas" width="400" height="400"></canvas>
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Score</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><input type="text" id="playerName" placeholder="Enter Name"></td>
+                <td><input type="number" id="playerScore" placeholder="Enter Score"></td>
+            </tr>
+        </tbody>
+    </table>
     <script>
         const canvas = document.getElementById('gameCanvas');
         const ctx = canvas.getContext('2d');

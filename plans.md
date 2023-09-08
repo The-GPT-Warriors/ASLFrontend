@@ -20,4 +20,4 @@ permalink: /plans
 
 ## Ethan's Plans
 - Code a baseline for the game
-- Start work on scoring system to track player scores
+- Start work on backend API to store usernames and scores
