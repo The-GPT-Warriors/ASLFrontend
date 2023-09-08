@@ -143,9 +143,9 @@ permalink: /game
                 document.getElementById("message").innerHTML = `Error: ${error.message}`;
             });
         });
-        const canvas = document.getElementById('gameCanvas');
-        const ctx = canvas.getContext('2d');
-        const player = {
+        const canvas = document.getElementById('gameCanvas'); // create canvas element
+        const ctx = canvas.getContext('2d'); // 2d rendering of canvas
+        const player = { // define player properties
             x: canvas.width / 2,
             y: canvas.height - 40,
             width: 40,
