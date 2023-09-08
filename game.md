@@ -16,21 +16,50 @@ permalink: /game
 </head>
 <body>
     <canvas id="gameCanvas" width="400" height="400"></canvas>
+<html>
+<head>
+    <title>Player List</title>
+</head>
+<body>
+    <h1>Scoreboard</h1>
     <table>
         <thead>
             <tr>
-                <th>Name</th>
+                <th>User</th>
                 <th>Score</th>
             </tr>
         </thead>
-        <tbody>
-            <tr>
-                <td><input type="text" id="playerName" placeholder="Enter Name"></td>
-                <td><input type="number" id="playerScore" placeholder="Enter Score"></td>
-            </tr>
+        <tbody id="player-list">
+            <!-- Player data will be inserted here -->
         </tbody>
     </table>
+</body>
+</html>
     <script>
+        // fetch player data from our backend API
+        function fetchPlayerData() {
+            fetch('http://172.31.132.100:8086/api/players/')
+                .then(response => response.json())
+                .then(data => {
+                    // player-list tbody element
+                    const playerList = document.getElementById('player-list');
+                    // clear any existing data
+                    playerList.innerHTML = '';
+                    // loop through the player data and create table rows
+                    data.forEach(player => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td>${player.user}</td>
+                            <td>${player.score}</td>
+                        `;
+                        playerList.appendChild(row);
+                    });
+                })
+                .catch(error => {
+                    console.error('Error fetching player data:', error);
+                });
+        }
+        fetchPlayerData();
         const canvas = document.getElementById('gameCanvas');
         const ctx = canvas.getContext('2d');
         const player = {
