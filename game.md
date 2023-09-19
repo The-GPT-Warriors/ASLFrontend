@@ -42,6 +42,7 @@ permalink: /game
             margin-bottom: 10px;
             border: 1px solid #ccc;
             border-radius: 4px;
+            color: black;
         }
         input[type="submit"] {
             background-color: gray;
