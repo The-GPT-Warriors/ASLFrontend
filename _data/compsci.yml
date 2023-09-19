@@ -9,3 +9,23 @@ Unit2:
   description: Learn (JavaScript|Python|Java).  Start Agile development process.
   start: 4
   end: 7
+Unit3:
+  title:  Individual/Team Projects and N@tM
+  description: This Units requirement is to to build individual development skills and a Team Frontend and Backend project in Java.  By the end of this unit students will be aware of all the College Board Units and FRQ types.   Student will participate in live grading of peers work.  Fastpages Blogs and Jupyter Notebooks are required for all individuals.   By the end of this section you should have examples, study materials, and code that show a great deal of effort, understanding, and competency.
+  start: 8
+  end: 12
+Unit4:
+  title: College Board Teaching and Study 
+  description: This period will complete formal teaching and grading on the basics of the 10 units.  Also, there will be a tech talk and homework on each FRQ type customized for Team PBL idea.
+  start: 13
+  end: 16
+Unit5:
+  title: Passion Projects
+  description: Objective of these weeks is to explore and create ideas and concepts for a Team two trimester project.  Adding frontend and creativity while using APIs/Databases.  This should be a project of personal and team interest.  Team projects that are most liked by Teachers and Students will be continued in Trimester 3.
+  start: 17
+  end: 20
+Unit6:
+  title: Creative Development and N@tM
+  description: This will be most creative portion of year for CSA students.  Each person within "Student Teams" will have their own specialty within their student project that shows Full Stack competency, requiring Java as backend.  Intentions for this period is to have a free and creative period, driven by your Issues and Scrum Board.  Student should be able to talk about design, do fe/be coding, addd database features and perform weekly live reviews.  
+  start: 21
+  end: 24

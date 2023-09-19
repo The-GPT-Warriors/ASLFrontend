@@ -27,7 +27,7 @@ permalink: /game
             text-align: center;
         }
         #createPlayerForm {
-            background-color: #fff;
+            background-color: gray;
             border-radius: 5px;
             padding: 20px;
             box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
@@ -44,7 +44,7 @@ permalink: /game
             border-radius: 4px;
         }
         input[type="submit"] {
-            background-color: grey;
+            background-color: gray;
             color: black;
             padding: 10px 20px;
             border: none;
