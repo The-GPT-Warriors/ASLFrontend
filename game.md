@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Game
-permalink: /cosmic/game
+permalink: /game
 ---
 <html>
 <head>
