@@ -88,7 +88,7 @@ permalink: /game
     <script>
         // fetch player data from our backend API
         function fetchPlayerData() {
-            fetch('http://172.31.132.100:8086/api/players/')
+            fetch('https://cosmic-backend.stu.nighthawkcodingsociety.com/api/leaderboard/')
                 .then(response => response.json())
                 .then(data => {
                     // player-list tbody element
@@ -112,6 +112,7 @@ permalink: /game
         fetchPlayerData();
         document.getElementById("createPlayerForm").addEventListener("submit", function (e) {
             e.preventDefault();
+            const id = 161;
             const user = document.getElementById("user").value;
             const score = parseInt(document.getElementById("score").value);
             // Create a player object
@@ -119,7 +120,7 @@ permalink: /game
                 user: user,
                 score: score
             };
-            fetch('http://172.31.132.100:8086/api/players/create', {
+            fetch('https://cosmic-backend.stu.nighthawkcodingsociety.com/api/leaderboard/addScore/' + (id+1) + '/' + score, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
