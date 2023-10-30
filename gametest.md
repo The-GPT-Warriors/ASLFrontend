@@ -1,4 +1,4 @@
----
+<!-- ---
 layout: default
 title: Game
 permalink: /game
@@ -8,10 +8,10 @@ permalink: /game
     <title>Cosmic Carnage</title>
     <style>
         canvas {
-        background-color: black;
-        display: block;
-        margin: 0 auto;
-    }
+            background-color: black;
+            display: block;
+            margin: 0 auto;
+        }
         body {
             font-family: Arial, sans-serif;
             background-color: #f2f2f2;
@@ -56,11 +56,6 @@ permalink: /game
 </head>
 <body>
     <canvas id="gameCanvas" width="400" height="400"></canvas>
-<html>
-<head>
-    <title>Player List</title>
-</head>
-<body>
     <h1>Scoreboard</h1>
     <table>
         <thead>
@@ -69,33 +64,31 @@ permalink: /game
                 <th>Score</th>
             </tr>
         </thead>
+        <tbody id="player-list">
+            <!-- Player data will be inserted here -->
+        </tbody>
+    </table>
     <h1>Create Player</h1>
     <form id="createPlayerForm">
         <label for="user">Username:</label>
         <input type="text" id="user" name="user" required>
         <br>
-        <label for="score">Score:</label>
+        <label for "score">Score:</label>
         <input type="number" id="score" name="score" required>
         <br>
         <input type="submit" value="Submit">
     </form>
-        <tbody id="player-list">
-            <!-- Player data will be inserted here -->
-        </tbody>
-    </table>
-</body>
-</html>
     <script>
-        // fetch player data from our backend API
+        // Fetch player data from our backend API
         function fetchPlayerData() {
             fetch('http://172.31.132.100:8086/api/players/')
                 .then(response => response.json())
                 .then(data => {
                     // player-list tbody element
                     const playerList = document.getElementById('player-list');
-                    // clear any existing data
+                    // Clear any existing data
                     playerList.innerHTML = '';
-                    // loop through the player data and create table rows
+                    // Loop through the player data and create table rows
                     data.forEach(player => {
                         const row = document.createElement('tr');
                         row.innerHTML = `
@@ -131,7 +124,7 @@ permalink: /game
                     return response.json(); // Successfully created a player
                 } else {
                     return response.json().then(errorData => {
-                        throw new Error(errorData.message);
+                        throw an Error(errorData.message);
                     });
                 }
             })
@@ -144,18 +137,18 @@ permalink: /game
                 document.getElementById("message").innerHTML = `Error: ${error.message}`;
             });
         });
-        const canvas = document.getElementById('gameCanvas'); // create canvas element
-        const ctx = canvas.getContext('2d'); // 2d rendering of canvas
-        const player = { // define player properties
+        const canvas = document.getElementById('gameCanvas'); // Create a canvas element
+        const ctx = canvas.getContext('2d'); // 2D rendering context of the canvas
+        const player = { // Define player properties
             x: canvas.width / 2,
             y: canvas.height - 40,
             width: 40,
             height: 40,
             speed: 10,
-            angle: 0
+            angle: 0,
         };
-        const bullets = []; // create an array to store bullets
-        const enemy = { // define enemy properties
+        const bullets = []; // Create an array to store bullets
+        const enemy = { // Define enemy properties
             x: canvas.width / 2,
             y: 0,
             width: 40,
@@ -166,13 +159,13 @@ permalink: /game
         let score = 0;
         let timeLeft = 30;
         const playerImage = new Image();
-        playerImage.src = 'https://github.com/TayKimmy/CSA_Repo/assets/107821010/28c3e277-b292-43f0-bcef-5460b19689b7'; // making the player a spaceship image
+        playerImage.src = 'https://github.com/TayKimmy/CSA_Repo/assets/107821010/28c3e277-b292-43f0-bcef-5460b19689b7'; // Use a spaceship image for the player
         const enemyImage = new Image();
-        enemyImage.src = 'https://github.com/Ant11234/student/assets/40652645/b7e15072-5d72-48f9-ad28-fdb227f2b20d'; // making the enemy a ufo image
+        enemyImage.src = 'https://github.com/Ant11234/student/assets/40652645/b7e15072-5d72-48f9-ad28-fdb227f2b20d'; // Use a UFO image for the enemy
         playerImage.onload = () => {
-            draw(); // execute draw() when the player's image is loaded
+            draw(); // Execute draw() when the player's image is loaded
         };
-        // draw the player's spaceship
+        // Draw the player's spaceship
         function drawPlayer() {
             ctx.save(); // Save the current context state
             ctx.translate(player.x + player.width / 2, player.y + player.height / 2); // Move the context origin to the center of the player
@@ -180,11 +173,11 @@ permalink: /game
             ctx.drawImage(playerImage, -player.width / 2, -player.height / 2, player.width, player.height); // Draw the player centered
             ctx.restore(); // Restore the context to the previous state
         }
-        // draw the enemy's spaceship
+        // Draw the enemy's spaceship
         function drawEnemy() {
             ctx.drawImage(enemyImage, enemy.x, enemy.y, enemy.width, enemy.height);
         }
-        // draw bullets on the canvas
+        // Draw bullets on the canvas
         function drawBullets() {
             for (let i = 0; i < bullets.length; i++) {
                 ctx.beginPath();
@@ -194,7 +187,7 @@ permalink: /game
                 ctx.closePath();
             }
         }
-        // move bullets upward
+        // Move bullets upward
         function moveBullets() {
             for (let i = 0; i < bullets.length; i++) {
                 bullets[i].y -= 5;
@@ -203,7 +196,7 @@ permalink: /game
                 }
             }
         }
-        // check for collisions between player, bullets, and enemy
+        // Check for collisions between player, bullets, and enemy
         function checkCollision() {
              if (
                 player.x < enemy.x + enemy.width &&
@@ -223,21 +216,21 @@ permalink: /game
                     enemy.x = Math.random() * (canvas.width - enemy.width);
                     enemy.y = 10;
                     bullets.splice(i, 1);
-                    score += 1; // increment the score when an enemy is hit
+                    score += 1; // Increment the score when an enemy is hit
                 }
             }
         }
-        // draw on the canvas
+        // Draw on the canvas
         function draw() {
-             ctx.clearRect(0, 0, canvas.width, canvas.height); // clear the canvas
-            if (!isGameOver && timeLeft > 0) { // if it is not game over and time is left
+            ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear the canvas
+            if (!isGameOver && timeLeft > 0) { // If it is not game over and time is left
                 drawPlayer();
                 drawEnemy();
                 drawBullets();
                 moveBullets();
                 checkCollision();
                 requestAnimationFrame(draw);
-                // display the score and time on the canvas
+                // Display the score and time on the canvas
                 ctx.font = "20px Arial";
                 ctx.fillStyle = "white";
                 ctx.fillText("Score: " + score, 10, 30);
@@ -255,39 +248,39 @@ permalink: /game
                 ctx.fillText("Score: " + score, canvas.width / 2 - 60, canvas.height / 2 + 40);
             }
         }
-        // function to handle user input (keyboard presses)
+        // Function to handle user input (keyboard presses)
         function keyDownHandler(e) {
-            if (e.key == "Right" || e.key == "ArrowRight") { // if right key is pushed
-                if (player.x + player.width < canvas.width) { // if player is not on the very far right
-                    player.x += player.speed; // moving with defined speed in the right direction
-                    player.angle = 0;
+            if (e.key == "Right" || e.key == "ArrowRight") { // If the right key is pushed
+                if (player.x + player.width < canvas.width) { // If the player is not on the very far right
+                    player.x += player.speed; // Move with defined speed to the right
+                    player.angle = 0; // Set the angle to face right
                 }
-            } else if (e.key == "Left" || e.key == "ArrowLeft") { // if left key is pushed
-                if (player.x > 0) { // if player is not on the very far left
-                    player.x -= player.speed; // moving with defined speed in left direction
-                    player.angle = Math.PI;
+            } else if (e.key == "Left" || e.key == "ArrowLeft") { // If the left key is pushed
+                if (player.x > 0) { // If the player is not on the very far left
+                    player.x -= player.speed; // Move with defined speed to the left
+                    player.angle = Math.PI; // Set the angle to face left
                 }
-            } else if (e.key == " ") { // if space is pushed
-                bullets.push({ // show bullets
-                    x: player.x + player.width / 2 - 2.5, // from the middle of the player's icon
-                    y: player.y, // from player's height
+            } else if (e.key == " ") { // If space is pushed
+                bullets.push({ // Show bullets
+                    x: player.x + player.width / 2 - 2.5, // From the middle of the player's icon
+                    y: player.y, // From player's height
                     width: 5,
                     height: 10
                 });
             }
         }
-        // add keydown event listener to the document
+        // Add keydown event listener to the document
         document.addEventListener("keydown", keyDownHandler, false);
         // Initial call to the draw() function
         draw();
         // Set up a timer interval to decrement timeLeft
         const timerInterval = setInterval(function() {
-            if (!isGameOver && timeLeft > 0) { // if time and game is not over
-                timeLeft--; // decrease time left
+            if (!isGameOver && timeLeft > 0) { // If time and game are not over
+                timeLeft--; // Decrease time left
             } else {
-                clearInterval(timerInterval); // clear interval if game is over
+                clearInterval(timerInterval); // Clear the interval if the game is over
             }
         }, 1000); // 1000 ms - making sure it is every 1 second
     </script>
 </body>
-</html>
+</html> -->
