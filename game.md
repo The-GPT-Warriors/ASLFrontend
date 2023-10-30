@@ -151,7 +151,7 @@ permalink: /game
             y: canvas.height - 40,
             width: 40,
             height: 40,
-            speed: 5
+            speed: 10
         };
         const bullets = []; // create an array to store bullets
         const enemy = { // define enemy properties
