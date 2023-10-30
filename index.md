@@ -1,6 +1,4 @@
----
-layout: default
-title: Student Blog
----
+<div class="index-header">
+
 
 ## Welcome to Cosmic Carnage!!
