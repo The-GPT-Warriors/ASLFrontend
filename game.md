@@ -152,6 +152,7 @@ permalink: /game
             width: 40,
             height: 40,
             speed: 10
+            angle: 0,
         };
         const bullets = []; // create an array to store bullets
         const enemy = { // define enemy properties
@@ -255,10 +256,12 @@ permalink: /game
             if (e.key == "Right" || e.key == "ArrowRight") { // if right key is pushed
                 if (player.x + player.width < canvas.width) { // if player is not on the very far right
                     player.x += player.speed; // moving with defined speed in the right direction
+                    player.angle = Math.PI / 2;
                 }
             } else if (e.key == "Left" || e.key == "ArrowLeft") { // if left key is pushed
                 if (player.x > 0) { // if player is not on the very far left
                     player.x -= player.speed; // moving with defined speed in left direction
+                    player.angle = -Math.PI / 2;
                 }
             } else if (e.key == " ") { // if space is pushed
                 bullets.push({ // show bullets
