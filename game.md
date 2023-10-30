@@ -232,7 +232,6 @@ permalink: /game
                 moveBullets();
                 checkCollision();
                 requestAnimationFrame(draw);
-                setInterval(draw, 1000 / 60);
                 // display the score and time on the canvas
                 ctx.font = "20px Arial";
                 ctx.fillStyle = "white";
