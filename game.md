@@ -174,7 +174,11 @@ permalink: /game
         };
         // draw the player's spaceship
         function drawPlayer() {
-            ctx.drawImage(playerImage, player.x, player.y, player.width, player.height);
+            ctx.save(); // Save the current canvas state
+            ctx.translate(player.x + player.width / 2, player.y + player.height / 2); // Translate to the player's center
+            ctx.rotate(player.angle); // Apply the rotation angle
+            ctx.drawImage(playerImage, -player.width / 2, -player.height / 2, player.width, player.height);
+            ctx.restore(); // Restore the canvas state
         }
         // draw the enemy's spaceship
         function drawEnemy() {
