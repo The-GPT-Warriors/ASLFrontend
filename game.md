@@ -8,10 +8,10 @@ permalink: /game
     <title>Cosmic Carnage</title>
     <style>
         canvas {
-            background-color: black;
-            display: block;
-            margin: 0 auto;
-        }
+        background-color: black;
+        display: block;
+        margin: 0 auto;
+    }
         body {
             font-family: Arial, sans-serif;
             background-color: #f2f2f2;
@@ -56,6 +56,11 @@ permalink: /game
 </head>
 <body>
     <canvas id="gameCanvas" width="400" height="400"></canvas>
+<html>
+<head>
+    <title>Player List</title>
+</head>
+<body>
     <h1>Scoreboard</h1>
     <table>
         <thead>
@@ -64,10 +69,6 @@ permalink: /game
                 <th>Score</th>
             </tr>
         </thead>
-        <tbody id="player-list">
-            <!-- Player data will be inserted here -->
-        </tbody>
-    </table>
     <h1>Create Player</h1>
     <form id="createPlayerForm">
         <label for="user">Username:</label>
@@ -78,6 +79,12 @@ permalink: /game
         <br>
         <input type="submit" value="Submit">
     </form>
+        <tbody id="player-list">
+            <!-- Player data will be inserted here -->
+        </tbody>
+    </table>
+</body>
+</html>
     <script>
         // fetch player data from our backend API
         function fetchPlayerData() {
@@ -144,8 +151,7 @@ permalink: /game
             y: canvas.height - 40,
             width: 40,
             height: 40,
-            speed: 10
-            angle: 0,
+            speed: 10,
         };
         const bullets = []; // create an array to store bullets
         const enemy = { // define enemy properties
