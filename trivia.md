@@ -1,7 +1,7 @@
 ---
 layout: default
-title: Moon API
-permalink: /moon
+title: API's
+permalink: /trivia
 ---
 <html>
 <script>
@@ -27,20 +27,23 @@ permalink: /moon
     xhr.open('GET', 'https://api.le-systeme-solaire.net/rest/bodies/');
     xhr.send(data);
     function moonSearch() {
-        console.log("searching")
-        var moon = document.getElementById("moon").value;
-        for (var i = 0; i < retdata['bodies'].length; i++) {
-            console.log(retdata['bodies'][i]['englishName'])
-            if (retdata['bodies'][i]['englishName'] == moon) {
-                console.log(retdata['bodies'][i])
-                document.getElementById("mooninfo").innerHTML = retdata['bodies'][i]['englishName'] + " is a moon of " + retdata['bodies'][i]['aroundPlanet']['planet'] + " and has a radius of " + retdata['bodies'][i]['meanRadius'] + " km. It has an axial tilt of " + retdata['bodies'][i]['axialTilt'] + " degrees.";
-                break;
-            }
-            if (i == 5) {
-                break;
-            }
+    console.log("searching");
+    var moon = document.getElementById("moon").value.toLowerCase(); // Convert user input to lowercase
+    var moonFound = false; // Track if the moon is found
+    for (var i = 0; i < retdata['bodies'].length; i++) {
+        var moonName = retdata['bodies'][i]['englishName'].toLowerCase(); // Convert moon name to lowercase for comparison
+        if (moonName === moon) {
+            console.log(retdata['bodies'][i]);
+            document.getElementById("mooninfo").innerHTML = retdata['bodies'][i]['englishName'] + " is a moon of " + retdata['bodies'][i]['aroundPlanet']['planet'] + " and has a radius of " + retdata['bodies'][i]['meanRadius'] + " km. It has an axial tilt of " + retdata['bodies'][i]['axialTilt'] + " degrees.";
+            moonFound = true;
+            break;
         }
     }
+    if (!moonFound) {
+        document.getElementById("mooninfo").innerHTML = "Moon not found";
+    }
+}
+
 </script>
 
 <h1>Moon API 😮 😮</h1>
