@@ -167,7 +167,7 @@ permalink: /game
         const playerImage = new Image();
         playerImage.src = 'https://github.com/TayKimmy/CSA_Repo/assets/107821010/28c3e277-b292-43f0-bcef-5460b19689b7'; // making the player a spaceship image
         const enemyImage = new Image();
-        enemyImage.src = 'https://github.com/Cosmic-Carnage/Project-CC/tree/main/images/enemy'; // making the enemy a ufo image
+        enemyImage.src = 'https://github.com/TayKimmy/CSA_Repo/assets/107821010/89f4c0d6-a856-4233-bc17-ea8821bc7a10'; // making the enemy a ufo image
         playerImage.onload = () => {
             draw(); // execute draw() when the player's image is loaded
         };
