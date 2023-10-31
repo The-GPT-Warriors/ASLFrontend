@@ -278,6 +278,7 @@ permalink: /game
             } else { // If no arrow keys are pressed
                 player.angle = 0; // Set the angle to face straight (0 degrees)
             }
+        }
         // add keydown event listener to the document
         document.addEventListener("keydown", keyDownHandler, false);
         // Initial call to the draw() function

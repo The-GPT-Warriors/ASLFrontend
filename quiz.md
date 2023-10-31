@@ -7,6 +7,7 @@ permalink: /quiz
     .selected {
         background-color: rgb(12, 141, 243);
     }
+    
 </style>
 <html>
 <head>
@@ -31,7 +32,13 @@ permalink: /quiz
     <center>
         <button id="next-btn">Next</button>
     </center>
-    <div id="username-input">
+    <br>
+    <div id="username-input"><center>
+        <input type="text" id="username" placeholder="Enter your username">
+        <button id="generate-btn">Generate</button>
+        </center></div>
+    <br>
+    <h1><center>Leadeboard</center></h1>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         const apiUrl = "http://localhost:8027/api/quiz/";
@@ -52,6 +59,8 @@ permalink: /quiz
         const questionContainer = document.getElementById("question-text");
         const answerButtons = document.querySelectorAll(".answer-btn");
         const nextButton = document.getElementById("next-btn");
+        const usernameInput = document.getElementById("username");
+        const generateButton = document.getElementById("generate-btn");
         function loadQuestion(questionIndex) {
             nextButton.disabled = true;
             answerButtons.forEach(button => button.classList.remove("selected"));
@@ -119,6 +128,10 @@ permalink: /quiz
                 nextButton.style.display = "none";
             }
         });
+        generateButton.addEventListener("click", () => {
+            const username = usernameInput.value;
+            fetch()
+        })
     </script>
 </body>
 </html>
