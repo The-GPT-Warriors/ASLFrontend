@@ -290,6 +290,10 @@ permalink: /game
                 });
                 playerImage.src = 'https://github.com/TayKimmy/CSA_Repo/assets/107821010/28c3e277-b292-43f0-bcef-5460b19689b7';
                 player.angle = 0;
+                document.removeEventListener("keydown", keyDownHandler); // Remove the event listener
+                setTimeout(function () {
+                    document.addEventListener("keydown", keyDownHandler); // Add it back after a delay
+                }, 100); // Adjust the delay to suit your desired fire rate
             }
         }
         // add keydown event listener to the document
