@@ -289,7 +289,7 @@ permalink: /game
                     height: 10
                     playerImage.src = 'https://github.com/TayKimmy/CSA_Repo/assets/107821010/28c3e277-b292-43f0-bcef-5460b19689b7';
                     player.angle = 0;
-                    drawPlayer();
+                    draw();
                 });
             }
         }
