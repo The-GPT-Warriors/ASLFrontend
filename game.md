@@ -282,7 +282,7 @@ permalink: /game
                     currentImageIndex = (currentImageIndex - 1 + playerImages.length) % playerImages.length;
                     playerImage.src = playerImages[currentImageIndex];
                 }
-            } else if (e.key == " ") { // if space is pushed
+            } else if (e.key == " " && canShoot == true) { // if space is pushed
                 bullets.push({ // show bullets
                     x: player.x + player.width / 2 - 2.5, // from the middle of the player's icon
                     y: player.y, // from player's height
@@ -292,9 +292,9 @@ permalink: /game
                 playerImage.src = 'https://github.com/TayKimmy/CSA_Repo/assets/107821010/28c3e277-b292-43f0-bcef-5460b19689b7';
                 player.angle = 0;
                 canShoot = false; // Prevent shooting until the cooldown period is over
-                // setTimeout(() => {
-                //     canShoot = true;
-                // }, 1000);
+                setTimeout(() => {
+                     canShoot = true;
+                }, 1000);
             }
         });
         // add keydown event listener to the document
