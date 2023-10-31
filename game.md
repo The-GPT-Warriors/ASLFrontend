@@ -256,17 +256,30 @@ permalink: /game
                 ctx.fillText("Score: " + score, canvas.width / 2 - 60, canvas.height / 2 + 40);
             }
         }
-        // function to handle user input (keyboard presses)
+        // Define an array to store spaceship images
+        const playerImages = [
+            'https://github.com/Ant11234/student/assets/40652645/b962acee-3350-48d3-b299-c9c27ace6765',
+            'https://github.com/Ant11234/student/assets/40652645/f72a81c8-4a8a-471d-b041-1cdd3b955a8c',
+            'https://github.com/Ant11234/student/assets/40652645/2d7ac38c-23e2-436e-b50d-b2e0a9f08049'
+        ];
+        let currentImageIndex = 0; // Index to keep track of the current spaceship image
+        // In the keyDownHandler function, update the player image based on movement direction
         function keyDownHandler(e) {
             if (e.key == "Right" || e.key == "ArrowRight") { // if right key is pushed
                 if (player.x + player.width < canvas.width) { // if player is not on the very far right
                     player.x += player.speed; // moving with defined speed in the right direction
-                    player.angle = Math.PI/2;
+                    player.angle = Math.PI / 2;
+                    // Switch to the next spaceship image (cycling through the array)
+                    currentImageIndex = (currentImageIndex + 1) % playerImages.length;
+                    playerImage.src = playerImages[currentImageIndex];
                 }
             } else if (e.key == "Left" || e.key == "ArrowLeft") { // if left key is pushed
                 if (player.x > 0) { // if player is not on the very far left
                     player.x -= player.speed; // moving with defined speed in left direction
-                    player.angle = -Math.PI/2;
+                    player.angle = -Math.PI / 2;
+                    // Switch to the previous spaceship image (cycling through the array)
+                    currentImageIndex = (currentImageIndex - 1 + playerImages.length) % playerImages.length;
+                    playerImage.src = playerImages[currentImageIndex];
                 }
             } else if (e.key == " ") { // if space is pushed
                 bullets.push({ // show bullets
@@ -280,6 +293,7 @@ permalink: /game
         // add keydown event listener to the document
         document.addEventListener("keydown", keyDownHandler, false);
         // Initial call to the draw() function
+        player.angle = 0;
         draw();
         // Set up a timer interval to decrement timeLeft
         const timerInterval = setInterval(function() {
@@ -293,3 +307,8 @@ permalink: /game
 </body>
 </html>
 
+<!-- Links to the player spaceship animation frames -->
+
+<!-- https://github.com/Ant11234/student/assets/40652645/b962acee-3350-48d3-b299-c9c27ace6765 -->
+<!-- https://github.com/Ant11234/student/assets/40652645/f72a81c8-4a8a-471d-b041-1cdd3b955a8c -->
+<!-- https://github.com/Ant11234/student/assets/40652645/2d7ac38c-23e2-436e-b50d-b2e0a9f08049 -->
