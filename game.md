@@ -258,9 +258,9 @@ permalink: /game
         }
         // Define an array to store spaceship images
         const playerImages = [
-            'https://github.com/Ant11234/student/assets/40652645/b962acee-3350-48d3-b299-c9c27ace6765',
-            'https://github.com/Ant11234/student/assets/40652645/f72a81c8-4a8a-471d-b041-1cdd3b955a8c',
-            'https://github.com/Ant11234/student/assets/40652645/2d7ac38c-23e2-436e-b50d-b2e0a9f08049'
+            'https://github.com/Ant11234/student/assets/40652645/15b4e3de-f9c4-4c70-adc9-d696cffd6ad7',
+            'https://github.com/Ant11234/student/assets/40652645/97854bf1-907b-4a51-9de1-7064b7f296da',
+            'https://github.com/Ant11234/student/assets/40652645/2122f367-aea5-4a97-bb5d-ace685929f77'
         ];
         let currentImageIndex = 0; // Index to keep track of the current spaceship image
         // In the keyDownHandler function, update the player image based on movement direction
