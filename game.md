@@ -275,8 +275,6 @@ permalink: /game
                     width: 5,
                     height: 10
                 });
-            } else { // If no arrow keys are pressed
-                player.angle = 0; // Set the angle to face straight (0 degrees)
             }
         }
         // add keydown event listener to the document
@@ -294,3 +292,4 @@ permalink: /game
     </script>
 </body>
 </html>
+
