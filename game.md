@@ -290,11 +290,12 @@ permalink: /game
                     width: 5,
                     height: 10
                 });
-            } else {}
+            }
         }
         // add keydown event listener to the document
         document.addEventListener("keydown", keyDownHandler, false);
         // Initial call to the draw() function
+        player.angle = 0;
         draw();
         // Set up a timer interval to decrement timeLeft
         const timerInterval = setInterval(function() {
