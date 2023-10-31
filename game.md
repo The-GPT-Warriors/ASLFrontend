@@ -292,6 +292,3 @@ permalink: /game
 </body>
 </html>
 
-<!-- https://github.com/Ant11234/student/assets/40652645/b962acee-3350-48d3-b299-c9c27ace6765 -->
-<!-- https://github.com/Ant11234/student/assets/40652645/f72a81c8-4a8a-471d-b041-1cdd3b955a8c -->
-<!-- https://github.com/Ant11234/student/assets/40652645/2d7ac38c-23e2-436e-b50d-b2e0a9f08049 -->
