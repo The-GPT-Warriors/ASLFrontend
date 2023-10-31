@@ -264,38 +264,33 @@ permalink: /game
         ];
         let currentImageIndex = 0; // Index to keep track of the current spaceship image
         // In the keyDownHandler function, update the player image based on movement direction
-        function keyDownHandler(e) {
-            if (e.key == "Right" || e.key == "ArrowRight") { // if right key is pushed
-                if (player.x + player.width < canvas.width) { // if player is not on the very far right
-                    player.x += player.speed; // moving with defined speed in the right direction
+        // Add the keydown event listener to the document
+        document.addEventListener("keydown", function (e) {
+            if (e.key == "Right" || e.key == "ArrowRight") {
+                if (player.x + player.width < canvas.width) {
+                    player.x += player.speed;
                     player.angle = Math.PI / 2;
-                    // Switch to the next spaceship image (cycling through the array)
                     currentImageIndex = (currentImageIndex + 1) % playerImages.length;
                     playerImage.src = playerImages[currentImageIndex];
                 }
-            } else if (e.key == "Left" || e.key == "ArrowLeft") { // if left key is pushed
-                if (player.x > 0) { // if player is not on the very far left
-                    player.x -= player.speed; // moving with defined speed in left direction
+            } else if (e.key == "Left" || e.key == "ArrowLeft") {
+                if (player.x > 0) {
+                    player.x -= player.speed;
                     player.angle = -Math.PI / 2;
-                    // Switch to the previous spaceship image (cycling through the array)
                     currentImageIndex = (currentImageIndex - 1 + playerImages.length) % playerImages.length;
                     playerImage.src = playerImages[currentImageIndex];
-                }
-            } else if (e.key == " ") { // if space is pushed
-                bullets.push({ // show bullets
-                    x: player.x + player.width / 2 - 2.5, // from the middle of the player's icon
-                    y: player.y, // from player's height
+                } 
+            } else if (e.key == " ") {
+                bullets.push({
+                    x: player.x + player.width / 2 - 2.5,
+                    y: player.y,
                     width: 5,
                     height: 10
                 });
                 playerImage.src = 'https://github.com/TayKimmy/CSA_Repo/assets/107821010/28c3e277-b292-43f0-bcef-5460b19689b7';
                 player.angle = 0;
-                document.removeEventListener("keydown", keyDownHandler); // Remove the event listener
-                setTimeout(function () {
-                    document.addEventListener("keydown", keyDownHandler); // Add it back after a delay
-                }, 100); // Adjust the delay to suit your desired fire rate
             }
-        }
+        });
         // add keydown event listener to the document
         document.addEventListener("keydown", keyDownHandler, false);
         // Initial call to the draw() function
