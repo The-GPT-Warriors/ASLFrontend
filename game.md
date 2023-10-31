@@ -261,12 +261,12 @@ permalink: /game
             if (e.key == "Right" || e.key == "ArrowRight") { // if right key is pushed
                 if (player.x + player.width < canvas.width) { // if player is not on the very far right
                     player.x += player.speed; // moving with defined speed in the right direction
-                    player.angle = 0;
+                    player.angle = Math.PI/2;
                 }
             } else if (e.key == "Left" || e.key == "ArrowLeft") { // if left key is pushed
                 if (player.x > 0) { // if player is not on the very far left
                     player.x -= player.speed; // moving with defined speed in left direction
-                    player.angle = Math.PI;
+                    player.angle = -Math.PI/2;
                 }
             } else if (e.key == " ") { // if space is pushed
                 bullets.push({ // show bullets
@@ -275,8 +275,9 @@ permalink: /game
                     width: 5,
                     height: 10
                 });
+            } else { // If no arrow keys are pressed
+                player.angle = 0; // Set the angle to face straight (0 degrees)
             }
-        }
         // add keydown event listener to the document
         document.addEventListener("keydown", keyDownHandler, false);
         // Initial call to the draw() function
