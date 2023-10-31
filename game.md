@@ -150,9 +150,9 @@ permalink: /game
         const player = { // define player properties
             x: canvas.width / 2,
             y: canvas.height - 40,
-            width: 40,
-            height: 40,
-            speed: 10,
+            width: 60,
+            height: 60,
+            speed: 15,
             angle: 0
         };
         const bullets = []; // create an array to store bullets
