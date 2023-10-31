@@ -295,7 +295,7 @@ permalink: /game
                 canShoot = false; // Prevent shooting until the cooldown period is over
                 setTimeout(() => {
                     canShoot = true;
-                }, cooldownTime);
+                }, 0.1);
             }
         });
         // add keydown event listener to the document
