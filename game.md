@@ -134,7 +134,7 @@ permalink: /game
             // Reset game variables
             isGameOver = false;
             score = 0;
-            timeLeft = 30;
+            timeLeft = 60;
             // Reset player position
             player.x = canvas.width / 2;
             player.y = canvas.height - 40;
