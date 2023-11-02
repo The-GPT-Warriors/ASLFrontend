@@ -1,8 +1,3 @@
----
-layout: default
-title: Game
-permalink: /game
----
 <html>
 <head>
     <title>Cosmic Carnage</title>
@@ -55,7 +50,7 @@ permalink: /game
     </style>
 </head>
 <body>
-    <canvas id="gameCanvas" width="400" height="400"></canvas>
+    <canvas id="gameCanvas" width="600" height="425"></canvas>
 <html>
 <head>
     <title>Player List</title>
@@ -149,10 +144,10 @@ permalink: /game
         const ctx = canvas.getContext('2d'); // 2d rendering of canvas
         const player = { // define player properties
             x: canvas.width / 2,
-            y: canvas.height - 40,
-            width: 40,
-            height: 40,
-            speed: 10,
+            y: canvas.height - 60,
+            width: 50,
+            height: 50,
+            speed: 20,
             angle: 0
         };
         const bullets = []; // create an array to store bullets
@@ -170,6 +165,8 @@ permalink: /game
         playerImage.src = 'https://github.com/TayKimmy/CSA_Repo/assets/107821010/28c3e277-b292-43f0-bcef-5460b19689b7'; // making the player a spaceship image
         const enemyImage = new Image();
         enemyImage.src = 'https://github.com/Ant11234/student/assets/40652645/b7e15072-5d72-48f9-ad28-fdb227f2b20d'; // making the enemy a ufo image
+        const minibossImage = new Image();
+        minibossImage.src = 'https://github.com/Ant11234/student/assets/40652645/3bf0b840-7b21-428d-858b-3c668db352f6'; // making a miniboss
         playerImage.onload = () => {
             draw(); // execute draw() when the player's image is loaded
         };
@@ -228,22 +225,72 @@ permalink: /game
                 }
             }
         }
-        // draw on the canvas
+        let killedEnemies = 0;
+        const miniBoss = {
+            x: 0,
+            y: 0,
+            width: 100,
+            height: 100,
+            speed: 10,
+        };
+        // Function to spawn the mini-boss
+        function spawnMiniBoss() {
+            miniBoss.x = Math.random() * (canvas.width - miniBoss.width);
+            miniBoss.y = Math.random() * (canvas.height - miniBoss.height);
+        }
+        // Draw the mini-boss
+        function drawMiniBoss() {
+            ctx.drawImage(minibossImage, miniBoss.x, miniBoss.y, miniBoss.width, miniBoss.height);
+        }
+        // Update the mini-boss
+        function updateMiniBoss() {
+            miniBoss.x += (Math.random() - 0.5) * miniBoss.speed;
+            miniBoss.y += (Math.random() - 0.5) * miniBoss.speed;
+            miniBoss.x = Math.max(0, Math.min(canvas.width - miniBoss.width, miniBoss.x));
+            miniBoss.y = Math.max(0, Math.min(canvas.height - miniBoss.height, miniBoss.y));
+        }
+        // Check for collisions with the mini-boss
+        function checkMiniBossCollision() {
+            if (
+                player.x < miniBoss.x + miniBoss.width &&
+                player.x + player.width > miniBoss.x &&
+                player.y < miniBoss.y + miniBoss.height &&
+                player.y + player.height > miniBoss.y
+            ) {
+                isGameOver = true;
+            }
+            for (let i = 0; i < bullets.length; i++) {
+                if (
+                    bullets[i].x < miniBoss.x + miniBoss.width &&
+                    bullets[i].x + bullets[i].width > miniBoss.x &&
+                    bullets[i].y < miniBoss.y + miniBoss.height &&
+                    bullets[i].y + bullets[i].height > miniBoss.y
+                ) {
+                    spawnMiniBoss(); // Respawn the mini-boss
+                    bullets.splice(i, 1);
+                    score += 10; // Increment the score when mini-boss is hit
+                }
+            }
+        }
+        spawnMiniBoss();
+        // Modify the draw function to include the mini-boss
         function draw() {
-             ctx.clearRect(0, 0, canvas.width, canvas.height); // clear the canvas
-            if (!isGameOver && timeLeft > 0) { // if it is not game over and time is left
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            if (!isGameOver && timeLeft > 0) {
                 drawPlayer();
                 drawEnemy();
+                drawMiniBoss(); // Draw the mini-boss
+                updateMiniBoss();
                 drawBullets();
                 moveBullets();
                 checkCollision();
+                checkMiniBossCollision(); // Check for mini-boss collision
                 requestAnimationFrame(draw);
-                // display the score and time on the canvas
                 ctx.font = "20px Arial";
                 ctx.fillStyle = "white";
                 ctx.fillText("Score: " + score, 10, 30);
                 ctx.fillText("Time Left: " + timeLeft + "s", 10, 60);
-            } else if (!isGameOver && timeLeft === 0) { 
+            } else if (!isGameOver && timeLeft === 0) {
                 isGameOver = true;
                 ctx.font = "30px Arial";
                 ctx.fillStyle = "red";
@@ -256,27 +303,47 @@ permalink: /game
                 ctx.fillText("Score: " + score, canvas.width / 2 - 60, canvas.height / 2 + 40);
             }
         }
-        // function to handle user input (keyboard presses)
-        function keyDownHandler(e) {
+        // Define an array to store spaceship images
+        const playerImages = [
+            'https://github.com/Ant11234/student/assets/40652645/15b4e3de-f9c4-4c70-adc9-d696cffd6ad7',
+            'https://github.com/Ant11234/student/assets/40652645/97854bf1-907b-4a51-9de1-7064b7f296da',
+            'https://github.com/Ant11234/student/assets/40652645/2122f367-aea5-4a97-bb5d-ace685929f77'
+        ];
+        let currentImageIndex = 0; // Index to keep track of the current spaceship image
+        // In the keyDownHandler function, update the player image based on movement direction
+        let canShoot = true;
+        const cooldownTime = 500; // Adjust the cooldown time as needed (in milliseconds)
+        document.addEventListener("keydown", function (e) {
             if (e.key == "Right" || e.key == "ArrowRight") { // if right key is pushed
                 if (player.x + player.width < canvas.width) { // if player is not on the very far right
-                    player.x += player.speed; // moving with defined speed in the right direction
-                    player.angle = Math.PI/2;
+                    player.x += player.speed;
+                    player.angle = Math.PI / 2;
+                    currentImageIndex = (currentImageIndex + 1) % playerImages.length;
+                    playerImage.src = playerImages[currentImageIndex];
                 }
             } else if (e.key == "Left" || e.key == "ArrowLeft") { // if left key is pushed
                 if (player.x > 0) { // if player is not on the very far left
-                    player.x -= player.speed; // moving with defined speed in left direction
-                    player.angle = -Math.PI/2;
+                    player.x -= player.speed;
+                    player.angle = -Math.PI / 2;
+                    // Switch to the previous spaceship image (cycling through the array)
+                    currentImageIndex = (currentImageIndex - 1 + playerImages.length) % playerImages.length;
+                    playerImage.src = playerImages[currentImageIndex];
                 }
-            } else if (e.key == " ") { // if space is pushed
+            } else if (e.key == " " && canShoot == true) { // if space is pushed
                 bullets.push({ // show bullets
                     x: player.x + player.width / 2 - 2.5, // from the middle of the player's icon
                     y: player.y, // from player's height
                     width: 5,
                     height: 10
                 });
+                playerImage.src = 'https://github.com/TayKimmy/CSA_Repo/assets/107821010/28c3e277-b292-43f0-bcef-5460b19689b7';
+                player.angle = 0;
+                canShoot = false; // Prevent shooting until the cooldown period is over
+                setTimeout(() => {
+                     canShoot = true;
+                }, cooldownTime);
             }
-        }
+        });
         // add keydown event listener to the document
         document.addEventListener("keydown", keyDownHandler, false);
         // Initial call to the draw() function
@@ -293,3 +360,6 @@ permalink: /game
 </body>
 </html>
 
+<!-- Enemy flying design -->
+
+<!-- https://github.com/Ant11234/student/assets/40652645/3bf0b840-7b21-428d-858b-3c668db352f6 -->
