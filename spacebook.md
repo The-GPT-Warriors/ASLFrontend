@@ -3,7 +3,6 @@ layout: default
 title: Spacebook
 permalink: /spacebook
 ---
-<!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8">
@@ -46,22 +45,31 @@ permalink: /spacebook
         <input type="text" name="fileName" placeholder="Enter file name">
         <input type="submit" value="Upload Image">
     </form>
-    <script>
-        document.getElementById("uploadForm").addEventListener("submit", function (event) {
-            event.preventDefault();
-            const form = new FormData(this);
-            const xhr = new XMLHttpRequest();
-            xhr.open("POST", "https://cosmic-backend.stu.nighthawkcodingsociety.com/image", true);
-            xhr.setRequestHeader("Access-Control-Allow-Origin", "*");
-            xhr.onload = function () {
-                if (xhr.status === 200) {
-                    console.log("Image request successful!");
-                } else {
-                    console.error("Image request failed with status: " + xhr.status);
-                }
-            };
-            xhr.send(form);
-        });
-    </script>
+<script>
+    // aevent listener for the form submission
+    document.getElementById("uploadForm").addEventListener("submit", function (event) {
+        event.preventDefault();
+        // create a new FormData object with the form data
+        const form = new FormData(this);
+        // create a new XMLHttpRequest object
+        const xhr = new XMLHttpRequest();
+        // POST request to backend
+        xhr.open("POST", "https://cosmic-backend.stu.nighthawkcodingsociety.com/image", true);
+        xhr.setRequestHeader("Access-Control-Allow-Origin", "*");
+        // define what to do when the request is complete
+        xhr.onload = function () {
+            // check if the request was successful
+            if (xhr.status === 200) {
+                console.log("Image request successful!");
+            } else {
+                // error checking
+                console.error("Image request failed with status: " + xhr.status);
+            }
+        };
+        // send the form data with the XMLHttpRequest
+        xhr.send(form);
+    });
+</script>
+
 </body>
 </html>
