@@ -388,8 +388,6 @@ permalink: /game
                 leaderboard: username,
                 score: score,
             };
-            console.log(username);
-            console.log(score);
             fetch(`http://localhost:8027/api/leaderboard/post/${username}/${score}`, {
                     method: 'POST',
                     mode: 'cors',
