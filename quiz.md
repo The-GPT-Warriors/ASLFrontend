@@ -79,6 +79,7 @@ permalink: /quiz
                 'Content-Type': 'application/json'
             }
         };
+        let questionAnswered = false;
         let score = 0;
         let questions = [];
         let currentQuestionIndex = 0;
@@ -100,6 +101,10 @@ permalink: /quiz
             });
         }
         function handleAnswerClick(event) {
+            if (questionAnswered) {
+                return;
+            }
+            questionAnswered = true;
             nextButton.disabled = false;
             let temp;
             answerButtons.forEach(button => button.classList.remove("selected"));

@@ -1,7 +1,7 @@
 ---
 layout: default
-title: Game
-permalink: /game
+title: Features
+permalink: /features
 ---
 ### Quiz
 - Should tell score at the end
