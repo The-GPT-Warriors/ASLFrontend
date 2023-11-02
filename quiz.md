@@ -69,7 +69,7 @@ permalink: /quiz
     </table>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
-        const apiUrl = "https://cosmic-backend.stu.nighthawkcodingsociety.com/api/quiz/";
+        const apiUrl = "http://localhost:8027/api/quiz/";
         const options = {
             method: 'GET',
             mode: 'cors',
@@ -163,7 +163,7 @@ permalink: /quiz
                 leaders: username,
                 score: score,
             };
-            fetch(`https://cosmic-backend.stu.nighthawkcodingsociety.com/api/quizleaders/post/${username}/${score}`, {
+            fetch(`http://localhost:8027/api/quizleaders/post/${username}/${score}`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -180,7 +180,7 @@ permalink: /quiz
             });
         });
         generateButton.addEventListener("click", () => {
-            fetch("https://cosmic-backend.stu.nighthawkcodingsociety.com/api/quizleaders/")
+            fetch("http://localhost:8027/api/quizleaders/")
             .then(response => response.json())
             .then(data => {
                 leaderboardTable.innerHTML = ""; // Clear previous data
