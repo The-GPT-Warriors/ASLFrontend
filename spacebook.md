@@ -8,12 +8,6 @@ permalink: /spacebook
     <meta charset="UTF-8">
     <title>Upload Image</title>
     <style>
-        body {
-            background: black fixed;
-            background-size: cover;
-            color: #fff;
-            font-family: 'Arial', sans-serif;
-        }
         #uploadForm {
             margin: 50px;
             padding: 20px;
