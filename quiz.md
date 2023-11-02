@@ -101,25 +101,24 @@ permalink: /quiz
             });
         }
         function handleAnswerClick(event) {
-            if (questionAnswered) {
-                return;
-            }
-            questionAnswered = true;
-            nextButton.disabled = false;
-            let temp;
-            answerButtons.forEach(button => button.classList.remove("selected"));
-            event.target.classList.add("selected");
-            answerButtons.forEach((button, index) => {
-                const choice = String.fromCharCode(65 + index).toLowerCase();
-                if (event.target === button) {
-                    temp = choice;
+            if(!questionAnswered) {
+                questionAnswered = true;
+                nextButton.disabled = false;
+                let temp;
+                answerButtons.forEach(button => button.classList.remove("selected"));
+                event.target.classList.add("selected");
+                answerButtons.forEach((button, index) => {
+                    const choice = String.fromCharCode(65 + index).toLowerCase();
+                    if (event.target === button) {
+                        temp = choice;
+                    }
+                });
+                const answerChoice = temp
+                const currentCorrectAnswer = correctAnswers[currentQuestionIndex];
+                if (answerChoice === currentCorrectAnswer) {
+                    score += 10;
                 }
-            });
-            const answerChoice = temp
-            const currentCorrectAnswer = correctAnswers[currentQuestionIndex];
-            if (answerChoice === currentCorrectAnswer) {
-                score += 10;
-            }
+            };
         }
         function updateScoreDisplay() {
             const scoreDisplay = document.getElementById("score-display");
@@ -171,6 +170,9 @@ permalink: /quiz
             };
             fetch(`https://cosmic-backend.stu.nighthawkcodingsociety.com/api/quizleaders/post/${username}/${score}`, {
                     method: 'POST',
+                    mode: 'cors',
+                    cache: 'default',
+                    credentials: 'same-origin',
                     headers: {
                         'Content-Type': 'application/json',
                         'Authorization': 'Bearer my-token'

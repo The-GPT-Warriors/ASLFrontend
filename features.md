@@ -7,6 +7,7 @@ permalink: /features
 - Should tell score at the end
 - Allow users to save score with username and auto-generated score
 - [Backend Link](https://cosmic-backend.stu.nighthawkcodingsociety.com/api/quiz/)
+- <img src="https://github.com/Cosmic-Carnage/Passion-Project/assets/107821010/185b9ae5-60f0-48fd-8152-d7688cf75af3">
 
 ### Quiz Leaderboard
 - Starts empty, but as people add their usernames and scores it will start filling up
@@ -24,6 +25,8 @@ permalink: /features
 - Miniboss with extra difficulty
 - Allow users to save score for game-specific leaderboard
 - Implements a timer system that automatically ends the game once time is up
+- <img src="https://github.com/Cosmic-Carnage/Passion-Project/assets/107821010/dfb1f975-3cdd-4822-87f0-71e66b77d361">
+
 
 ### Game Leaderboard
 - [Backend Link](https://cosmic-backend.stu.nighthawkcodingsociety.com/api/leaderboard/)
@@ -34,3 +37,4 @@ permalink: /features
 - Allow users to request to view image files
 - Allow users to like and dislike images
 - Allow users to delete images and associated likes and dislikes
+- <img src="https://github.com/Cosmic-Carnage/Passion-Project/assets/107821010/b9ee7056-ba6d-404a-84fe-d4e9a241b91e">
