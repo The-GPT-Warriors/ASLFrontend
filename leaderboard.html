@@ -147,8 +147,9 @@ function fetchLb() {
             // if moon entry is not found, log "moon not found"
             retdata = JSON.parse(retdata)
             sortedRetdata = mergeSort(retdata, "score");
+            console.log(sortedRetdata)
             for (entry=0; entry<=6; entry++) {
-                player = sortedRetdata[entry]["leaderboard"]
+                player = sortedRetdata[entry]["leaders"]
                 score = sortedRetdata[entry]["score"]
                 const div = document.createElement("div");
                 div.setAttribute("id", "lbEntry" + entry);
