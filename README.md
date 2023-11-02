@@ -1,4 +1,4 @@
-Link to project runtime: [https://cosmic-carnage.github.io/Passion-Project/]([url](https://cosmic-carnage.github.io/Passion-Project/))
+Link to project runtime: [https://cosmic-carnage.github.io/Passion-Project/](https://cosmic-carnage.github.io/Passion-Project/)
 
 ## Blog site using GitHub Pages and Jekyll
 > This site is intended for Students.   This is to record plans, complete hacks, and do work for your learnings.
