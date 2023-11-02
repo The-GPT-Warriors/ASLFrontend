@@ -94,7 +94,7 @@
                     data.forEach(player => {
                         const row = document.createElement('tr');
                         row.innerHTML = `
-                            <td>${player.user}</td>
+                            <td>${player.leaderboard}</td>
                             <td>${player.score}</td>
                         `;
                         playerList.appendChild(row);
@@ -112,7 +112,7 @@
             const score = parseInt(document.getElementById("score").value);
             // Create a player object
             const playerData = {
-                user: user,
+                leaderboard: user,
                 score: score
             };
             fetch('https://cosmic-backend.stu.nighthawkcodingsociety.com/api/leaderboard/addScore/' + (id+1) + '/' + score, {

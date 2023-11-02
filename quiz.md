@@ -152,6 +152,7 @@ permalink: /quiz
             button.addEventListener("click", handleAnswerClick);
         });
         nextButton.addEventListener("click", () => {
+            questionAnswered = false;
             currentQuestionIndex++;
             if (currentQuestionIndex < questions.length) {
                 loadQuestion(currentQuestionIndex);
