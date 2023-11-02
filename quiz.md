@@ -79,6 +79,7 @@ permalink: /quiz
                 'Content-Type': 'application/json'
             }
         };
+        let count = 0;
         let score = 0;
         let questions = [];
         let currentQuestionIndex = 0;
@@ -99,26 +100,23 @@ permalink: /quiz
                 button.textContent = String.fromCharCode(65 + index) + ". " + question.choices[index];
             });
         }
-        let answeredQuestions = new Array(questions.length).fill(false);
         function handleAnswerClick(event) {
-            if(!answeredQuestions[currentQuestionIndex]) {
-                answeredQuestions[currentQuestionIndex] = true;
-                nextButton.disabled = false;
-                let temp;
-                answerButtons.forEach(button => button.classList.remove("selected"));
-                event.target.classList.add("selected");
-                answerButtons.forEach((button, index) => {
-                    const choice = String.fromCharCode(65 + index).toLowerCase();
-                    if (event.target === button) {
-                        temp = choice;
-                    }
-                });
-                const answerChoice = temp
-                const currentCorrectAnswer = correctAnswers[currentQuestionIndex];
-                if (answerChoice === currentCorrectAnswer) {
-                    score += 10;
+            nextButton.disabled = false;
+            let temp;
+            answerButtons.forEach(button => button.classList.remove("selected"));
+            event.target.classList.add("selected");
+            answerButtons.forEach((button, index) => {
+                const choice = String.fromCharCode(65 + index).toLowerCase();
+                if (event.target === button) {
+                    temp = choice;
                 }
-            };
+            });
+            const answerChoice = temp
+            const currentCorrectAnswer = correctAnswers[currentQuestionIndex];
+            if (answerChoice === currentCorrectAnswer && count = 0) {
+                score += 10;
+                count = 1;
+            }
         }
         function updateScoreDisplay() {
             const scoreDisplay = document.getElementById("score-display");
@@ -151,7 +149,7 @@ permalink: /quiz
             button.addEventListener("click", handleAnswerClick);
         });
         nextButton.addEventListener("click", () => {
-            questionAnswered = false;
+            count = 0;
             currentQuestionIndex++;
             if (currentQuestionIndex < questions.length) {
                 loadQuestion(currentQuestionIndex);
