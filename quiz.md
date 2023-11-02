@@ -113,7 +113,7 @@ permalink: /quiz
             });
             const answerChoice = temp
             const currentCorrectAnswer = correctAnswers[currentQuestionIndex];
-            if (answerChoice === currentCorrectAnswer && count = 0) {
+            if (answerChoice === currentCorrectAnswer && count === 0) {
                 score += 10;
                 count = 1;
             }
