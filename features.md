@@ -35,6 +35,4 @@ permalink: /features
 ### Spacebook
 - Allow users to upload image files
 - Allow users to request to view image files
-- Allow users to like and dislike images
-- Allow users to delete images and associated likes and dislikes
 - <img src="https://github.com/Cosmic-Carnage/Issues/assets/109186517/53fe19ee-9a6d-4123-bbe7-74d223d317eb">
