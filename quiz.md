@@ -79,7 +79,6 @@ permalink: /quiz
                 'Content-Type': 'application/json'
             }
         };
-        let answeredQuestions = new Array(questions.length).fill(false);
         let score = 0;
         let questions = [];
         let currentQuestionIndex = 0;
@@ -91,6 +90,7 @@ permalink: /quiz
         const createButton = document.getElementById("create-btn");
         const generateButton = document.getElementById("generate-btn");
         const leaderboardTable = document.getElementById("leaderboard");
+        let answeredQuestions = new Array(questions.length).fill(false);
         function loadQuestion(questionIndex) {
             nextButton.disabled = true;
             answerButtons.forEach(button => button.classList.remove("selected"));
