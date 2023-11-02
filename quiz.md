@@ -55,18 +55,7 @@ permalink: /quiz
         <button id="create-btn">Create</button>
         </center></div>
     <br>
-    <center><button id="generate-btn">Generate</button></center>
-    <h1><center>Leaderboard</center></h1>
-    <table id="header" style="margin: 0 auto;">
-        <thead>
-        <tr>
-            <th>Name</th>
-            <th>Score</th>
-        </tr>
-        </thead>
-        <tbody id="leaderboard">
-        </tbody>
-    </table>
+    <center><button id="generate-btn" onclick="window.location='/Passion-Project/leaderboard'">Leaderboard</button></center>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         const apiUrl = "https://cosmic-backend.stu.nighthawkcodingsociety.com/api/quiz/";
@@ -90,7 +79,6 @@ permalink: /quiz
         const usernameInput = document.getElementById("username");
         const createButton = document.getElementById("create-btn");
         const generateButton = document.getElementById("generate-btn");
-        const leaderboardTable = document.getElementById("leaderboard");
         function loadQuestion(questionIndex) {
             nextButton.disabled = true;
             answerButtons.forEach(button => button.classList.remove("selected"));
@@ -183,23 +171,6 @@ permalink: /quiz
             })
             .catch(error => {
                 console.error("Error: " + error);
-            });
-        });
-        generateButton.addEventListener("click", () => {
-            fetch("https://cosmic-backend.stu.nighthawkcodingsociety.com/api/quizleaders/")
-            .then(response => response.json())
-            .then(data => {
-                leaderboardTable.innerHTML = ""; // Clear previous data
-                data.forEach(item => {
-                    const row = leaderboardTable.insertRow(-1);
-                    const cell1 = row.insertCell(0);
-                    const cell2 = row.insertCell(1);
-                    cell1.innerHTML = item.leaders;
-                    cell2.innerHTML = item.score;
-                });
-            })
-            .catch(error => {
-                console.error("Error:", error);
             });
         });
     </script>
