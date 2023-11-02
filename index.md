@@ -1,4 +1,4 @@
 <div class="index-header">
 
 
-## Welcome to Cosmic Carnage!!
+Welcome to Cosmic Carnage!
