@@ -37,4 +37,4 @@ permalink: /features
 - Allow users to request to view image files
 - Allow users to like and dislike images
 - Allow users to delete images and associated likes and dislikes
-- <img src="https://github.com/Cosmic-Carnage/Passion-Project/assets/107821010/b9ee7056-ba6d-404a-84fe-d4e9a241b91e">
+- <img src="https://github.com/Cosmic-Carnage/Issues/assets/109186517/53fe19ee-9a6d-4123-bbe7-74d223d317eb">
