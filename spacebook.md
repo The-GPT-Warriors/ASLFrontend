@@ -3,60 +3,42 @@ layout: default
 title: Spacebook
 permalink: /spacebook
 ---
+<!DOCTYPE html>
 <html>
 <head>
-    <title>Cosmic Carnage</title>
+    <meta charset="UTF-8">
+    <title>Upload Image</title>
     <style>
-        canvas {
-        background-color: black;
-        display: block;
-        margin: 0 auto;
-    }
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f2f2f2;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
+            background: black fixed;
+            background-size: cover;
+            color: #fff;
+            font-family: 'Arial', sans-serif;
         }
-        h1 {
-            text-align: center;
-        }
-        #createPlayerForm {
-            background-color: gray;
-            border-radius: 5px;
+        #uploadForm {
+            margin: 50px;
             padding: 20px;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            background-color: rgba(0, 0, 0, 0.7);
+            border-radius: 10px;
         }
-        label {
-            font-weight: bold;
-        }
+        input[type="file"],
         input[type="text"],
-        input[type="number"] {
-            width: 100%;
+        input[type="submit"] {
+            display: block;
+            margin: 10px 0;
             padding: 10px;
-            margin-bottom: 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            color: black;
+            width: 100%;
+            border: none;
+            border-radius: 5px;
+            background-color: rgba(51, 51, 51, 0.8);
+            color: #fff;
         }
         input[type="submit"] {
-            background-color: gray;
-            color: black;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 4px;
+            background-color: #007bff;
+            color: #fff;
             cursor: pointer;
         }
     </style>
-</head>
-<html>
-<head>
-    <title>Spacebook</title>
 </head>
 <body>
     <form id="uploadForm" enctype="multipart/form-data" method="post">
@@ -68,13 +50,9 @@ permalink: /spacebook
         document.getElementById("uploadForm").addEventListener("submit", function (event) {
             event.preventDefault();
             const form = new FormData(this);
-            // Create a new XMLHttpRequest object
             const xhr = new XMLHttpRequest();
-            // Define the HTTP method and the URL
             xhr.open("POST", "https://cosmic-backend.stu.nighthawkcodingsociety.com/image", true);
-            // Set CORS headers
             xhr.setRequestHeader("Access-Control-Allow-Origin", "*");
-            // Handle the response
             xhr.onload = function () {
                 if (xhr.status === 200) {
                     console.log("Image request successful!");
@@ -82,8 +60,8 @@ permalink: /spacebook
                     console.error("Image request failed with status: " + xhr.status);
                 }
             };
-            // Send the request
             xhr.send(form);
         });
     </script>
 </body>
+</html>
