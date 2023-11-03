@@ -1,6 +1,6 @@
 ---
 layout: default
-title: Delete
+title: Delete Test
 permalink: /delete
 ---
 <html>
