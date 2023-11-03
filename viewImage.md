@@ -79,35 +79,6 @@ function fetchImage() {
             });
     }
 }
-function fetchAllImages() {
-    const imageContainer = document.getElementById('imageContainer');
-    imageContainer.innerHTML = '';
-    // fetch list of all available images
-    fetch('https://cosmic-backend.stu.nighthawkcodingsociety.com/images')
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.json();
-        })
-        .then(data => {
-            // iterate through list of image file names
-            data.forEach(fileName => {
-                // image URL for each file
-                const imageURL = `https://cosmic-backend.stu.nighthawkcodingsociety.com/image/${fileName}`;
-                const image = document.createElement('img');
-                image.src = imageURL;
-                // add each image to the image container
-                imageContainer.appendChild(image);
-            });
-        })
-        .catch(error => {
-            // error checking
-            console.error('Error fetching images:', error);
-        });
-}
-        // call fetchAllImages when the page loads
-        fetchAllImages();
     </script>
 </body>
 </html>
