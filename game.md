@@ -9,24 +9,24 @@ permalink: /game
     <style>
         canvas {
             background-color: black;
-            display: block;
+            display: none; /* Set it to 'none' to hide initially */
             margin: 0 auto;
         }
         #header {
-        margin: 0 auto;
-    }
+            margin: 0 auto;
+        }
         #header th {
-        background-color: #8F0CD9;
-        color: #fff;
-        padding: 10px;
-        width: 200px;
-        text-align: center;
-    }
+            background-color: #8F0CD9;
+            color: #fff;
+            padding: 10px;
+            width: 200px;
+            text-align: center;
+        }
         #header td {
-        padding: 8px;
-        text-align: center;
-        border: 1px solid #ccc;
-    }
+            padding: 8px;
+            text-align: center;
+            border: 1px solid #ccc;
+        }
         body {
             font-family: Arial, sans-serif;
             background-color: #f2f2f2;
@@ -40,13 +40,6 @@ permalink: /game
         }
         h1 {
             text-align: center;
-        }
-        #createPlayerForm {
-            background-color: gray;
-            border-radius: 5px;
-            padding: 20px;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-            display: block;
         }
         label {
             font-weight: bold;
@@ -106,6 +99,7 @@ permalink: /game
     <br>
     <button id="create-btn">Add to Leaderboard</button>
     <br>
+    <div id="timer" style="position: absolute; top: 10px; right: 10px; font-size: 20px; color: white;"></div>
     <br>
     <center><button id="generate-btn">Generate Leaderboard</button></center>
     <h1>Scoreboard</h1>
@@ -121,6 +115,7 @@ permalink: /game
         </tbody>
     </table>
     <script>
+        let timeLeft = 60;
         const generateButton = document.getElementById("generate-btn");
         const createButton = document.getElementById("create-btn");
         const input = document.getElementById("user");
@@ -148,7 +143,15 @@ permalink: /game
             const user = document.getElementById("user").value;
             // Display a success message
             document.getElementById("createPlayerForm").style.display = "none"; // Hide the form
-            startGame(); // Call your game start function here
+            // Show the canvas, heading, and table
+            canvas.style.display = 'block';
+            document.querySelector('h1').style.display = 'block';
+            document.querySelector('table').style.display = 'block';
+            // Clear the canvas
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            // Call your game start function here
+            startGame();
+            spawnMiniBoss();
         });
         // Initialize the canvas and game parameters
         const canvas = document.getElementById('gameCanvas'); // create canvas element
@@ -171,7 +174,6 @@ permalink: /game
         };
         let isGameOver = false;
         let score = 0;
-        let timeLeft = 30;
         const playerImage = new Image();
         playerImage.src = 'https://github.com/TayKimmy/CSA_Repo/assets/107821010/28c3e277-b292-43f0-bcef-5460b19689b7'; // making the player a spaceship image
         const enemyImage = new Image();
@@ -244,13 +246,27 @@ permalink: /game
             speed: 15,
         };
         // Function to spawn the mini-boss
+        // Function to spawn the mini-boss
         function spawnMiniBoss() {
-            miniBoss.x = Math.random() * (canvas.width - miniBoss.width);
-            miniBoss.y = Math.random() * (canvas.height - miniBoss.height);
+            let minDistance = 300; // Minimum distance between player and mini-boss
+            let validSpawn = false;
+            while (!validSpawn) {
+                miniBoss.x = Math.random() * (canvas.width - miniBoss.width);
+                miniBoss.y = Math.random() * (canvas.height - miniBoss.height);
+                // Calculate the distance between player and mini-boss
+                let distance = Math.sqrt(Math.pow(player.x - miniBoss.x, 2) + Math.pow(player.y - miniBoss.y, 2));
+                if (distance >= minDistance) {
+                    validSpawn = true;
+                }
+            }
         }
         // Draw the mini-boss
         function drawMiniBoss() {
-            ctx.drawImage(minibossImage, miniBoss.x, miniBoss.y, miniBoss.width, miniBoss.height);
+            ctx.save();
+            ctx.translate(miniBoss.x + miniBoss.width / 2, miniBoss.y + miniBoss.height / 2);
+            ctx.rotate(Math.PI); // Rotate by 180 degrees (π radians)
+            ctx.drawImage(minibossImage, -miniBoss.width / 2, -miniBoss.height / 2, miniBoss.width, miniBoss.height);
+            ctx.restore();
         }
         // Update the mini-boss
         function updateMiniBoss() {
@@ -290,18 +306,17 @@ permalink: /game
             // Reset game variables
             isGameOver = false;
             score = 0;
-            timeLeft = 30;
-            player.x = canvas.width / 2;
-            player.y = canvas.height - 40;
-            // Hide the button and show the "Create Player" form
-            playAgainButton.style.display = "none";
-            document.getElementById("createPlayerForm").style.display = "block";
             // Clear the canvas
             ctx.clearRect(0, 0, canvas.width, canvas.height);
+            // Hide the "Create Player" form and show the canvas
+            document.getElementById("createPlayerForm").style.display = "block"; // Show the "Create Player" form
+            canvas.style.display = 'none'; // Hide the canvas
+            document.querySelector('h1').style.display = 'none'; // Hide the heading
+            document.querySelector('table').style.display = 'none'; // Hide the table
+            input.value = ""; // Clear the input field
+            input.disabled = false; // Enable the input field
             // Call your game start function again
-            startGame();
         });
-        spawnMiniBoss();
         // draw on the canvas
         function draw() {
             ctx.clearRect(0, 0, canvas.width, canvas.height); // clear the canvas
@@ -320,6 +335,7 @@ permalink: /game
                 ctx.fillStyle = "white";
                 ctx.fillText("Score: " + score, 10, 30);
                 ctx.fillText("Time Left: " + timeLeft + "s", 10, 60);
+                // console.log(timeLeft);
             } else if (!isGameOver && timeLeft === 0) { 
                 isGameOver = true;
                 ctx.font = "30px Arial";
@@ -348,40 +364,62 @@ permalink: /game
             'https://github.com/Ant11234/student/assets/40652645/97854bf1-907b-4a51-9de1-7064b7f296da',
             'https://github.com/Ant11234/student/assets/40652645/2122f367-aea5-4a97-bb5d-ace685929f77'
         ];
+        let currentPlayerImageIndex = 0;
+        function changePlayerImage() {
+            // Update the player image source with the next image in the array
+            playerImage.src = playerImages[currentPlayerImageIndex];
+            // Increment the index or reset it to 0 if it exceeds the array length
+            currentPlayerImageIndex = (currentPlayerImageIndex + 1) % playerImages.length;
+        }
+        // Call the changePlayerImage function every second (1000 milliseconds)
+        setInterval(changePlayerImage, 10000);
         // function to handle user input (keyboard presses)
-        function keyDownHandler(e) {
-            if (e.key == "Right" || e.key == "ArrowRight") { // if right key is pushed
-                if (player.x + player.width < canvas.width) { // if player is not on the very far right
-                    player.x += player.speed; // moving with defined speed in the right direction
+        const keysPressed = {}; // Keep track of keys that are currently pressed
+        document.addEventListener("keydown", (e) => {
+            keysPressed[e.key] = true; // Mark the key as pressed
+            handleKeyPresses();
+        });
+        document.addEventListener("keyup", (e) => {
+            delete keysPressed[e.key]; // Mark the key as released
+            handleKeyPresses();
+        });
+        function handleKeyPresses() {
+            if (keysPressed["ArrowRight"] || keysPressed["Right"]) {
+                if (player.x + player.width < canvas.width) {
+                    player.x += player.speed;
                     player.angle = Math.PI / 2;
                 }
-            } else if (e.key == "Left" || e.key == "ArrowLeft") { // if left key is pushed
-                if (player.x > 0) { // if player is not on the very far left
-                    player.x -= player.speed; // moving with defined speed in left direction
+            } else if (keysPressed["ArrowLeft"] || keysPressed["Left"]) {
+                if (player.x > 0) {
+                    player.x -= player.speed;
                     player.angle = -Math.PI / 2;
-                    // Switch to the previous spaceship image (cycling through the array)
                 }
-            } else if (e.key == " ") { // if space is pushed
-                bullets.push({ // show bullets
-                    x: player.x + player.width / 2 - 2.5, // from the middle of the player's icon
-                    y: player.y, // from player's height
+            }
+            if (keysPressed[" "] || keysPressed["Space"]) {
+                bullets.push({
+                    x: player.x + player.width / 2 - 2.5,
+                    y: player.y,
                     width: 5,
                     height: 10
                 });
             }
         }
         // add keydown event listener to the document
-        document.addEventListener("keydown", keyDownHandler, false);
         // Initial call to the draw() function
         draw();
-        // Set up a timer interval to decrement timeLeft
+        // Set up a timer interval to decrement timeLef
+        const timerDisplay = document.getElementById('timer');
+        function updateTimerDisplay() {
+            timerDisplay.innerText = timeLeft + 's';
+        }
         const timerInterval = setInterval(function() {
-            if (!isGameOver && timeLeft > 0) { // if time and game is not over
-                timeLeft--; // decrease time left
+            if (!isGameOver && timeLeft > 0) {
+                timeLeft--; // Decrease time left
+                updateTimerDisplay(); // Update the timer display
             } else {
-                clearInterval(timerInterval); // clear interval if game is over
+                clearInterval(timerInterval); // Clear interval if the game is over
             }
-        }, 1000); // 100
+        }, 1000);
         createButton.addEventListener("click", () => {
             username = input.value;
             const postData = {
