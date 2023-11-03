@@ -1,11 +1,31 @@
+---
+layout: default
+title: Game
+permalink: /game
+---
 <html>
 <head>
     <title>Cosmic Carnage</title>
     <style>
         canvas {
-        background-color: black;
-        display: block;
+            background-color: black;
+            display: block;
+            margin: 0 auto;
+        }
+        #header {
         margin: 0 auto;
+    }
+        #header th {
+        background-color: #8F0CD9;
+        color: #fff;
+        padding: 10px;
+        width: 200px;
+        text-align: center;
+    }
+        #header td {
+        padding: 8px;
+        text-align: center;
+        border: 1px solid #ccc;
     }
         body {
             font-family: Arial, sans-serif;
@@ -26,12 +46,12 @@
             border-radius: 5px;
             padding: 20px;
             box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            display: block;
         }
         label {
             font-weight: bold;
         }
-        input[type="text"],
-        input[type="number"] {
+        input[type="text"] {
             width: 100%;
             padding: 10px;
             margin-bottom: 10px;
@@ -47,107 +67,98 @@
             border-radius: 4px;
             cursor: pointer;
         }
+        #message {
+            text-align: center;
+        }
+        canvas, #playAgainButton {
+            display: none;
+        }
+        #playAgainButton {
+            display: none;
+            background-color: #662d91;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold; 
+        }
+        #createPlayerForm {
+            background-color: #662d91; 
+            border-radius: 5px;
+            padding: 20px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            display: block;
+        }
     </style>
 </head>
 <body>
     <canvas id="gameCanvas" width="600" height="425"></canvas>
-<html>
-<head>
-    <title>Player List</title>
-</head>
-<body>
+    <h1>Create Player</h1>
+    <form id="createPlayerForm">
+        <label for="user">Username:</label>
+        <input type="text" id="user" name="user" required>
+        <br>
+        <input type="submit" value="Start Game">
+    </form>
+    <p id="message"></p>
+    <button id="playAgainButton" style="display: none;">Play Again</button>
+    <br>
+    <button id="create-btn">Add to Leaderboard</button>
+    <br>
+    <br>
+    <center><button id="generate-btn">Generate Leaderboard</button></center>
     <h1>Scoreboard</h1>
-    <table>
+    <table id="header" style="margin: 0 auto;">
         <thead>
             <tr>
                 <th>User</th>
                 <th>Score</th>
             </tr>
         </thead>
-    <h1>Create Player</h1>
-    <form id="createPlayerForm">
-        <label for="user">Username:</label>
-        <input type="text" id="user" name="user" required>
-        <br>
-        <label for="score">Score:</label>
-        <input type="number" id="score" name="score" required>
-        <br>
-        <input type="submit" value="Submit">
-    </form>
         <tbody id="player-list">
             <!-- Player data will be inserted here -->
         </tbody>
     </table>
-</body>
-</html>
     <script>
-        // fetch player data from our backend API
-        function fetchPlayerData() {
-            fetch('https://cosmic-backend.stu.nighthawkcodingsociety.com/api/leaderboard/')
-                .then(response => response.json())
-                .then(data => {
-                    // player-list tbody element
-                    const playerList = document.getElementById('player-list');
-                    // clear any existing data
-                    playerList.innerHTML = '';
-                    // loop through the player data and create table rows
-                    data.forEach(player => {
-                        const row = document.createElement('tr');
-                        row.innerHTML = `
-                            <td>${player.leaderboard}</td>
-                            <td>${player.score}</td>
-                        `;
-                        playerList.appendChild(row);
-                    });
-                })
-                .catch(error => {
-                    console.error('Error fetching player data:', error);
-                });
+        const generateButton = document.getElementById("generate-btn");
+        const createButton = document.getElementById("create-btn");
+        const input = document.getElementById("user");
+        const leaderboardTable = document.getElementById('player-list');
+        function startGame() {
+            canvas.style.display = 'block';
+            document.querySelector('h1').style.display = 'block';
+            document.querySelector('table').style.display = 'block';
+            // Clear the canvas
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            // Reset game variables
+            isGameOver = false;
+            score = 0;
+            timeLeft = 60;
+            // Reset player position
+            player.x = canvas.width / 2;
+            player.y = canvas.height - 40;
+            // Add any other variable resets here
+            // Start the game loop
+            draw();
         }
-        fetchPlayerData();
+        // Display the "Create Player" form when the Start Game button is clicked
         document.getElementById("createPlayerForm").addEventListener("submit", function (e) {
             e.preventDefault();
-            const id = 161;
             const user = document.getElementById("user").value;
-            const score = parseInt(document.getElementById("score").value);
-            // Create a player object
-            const playerData = {
-                leaderboard: user,
-                score: score
-            };
-            fetch('https://cosmic-backend.stu.nighthawkcodingsociety.com/api/leaderboard/addScore/' + (id+1) + '/' + score, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(playerData),
-            })
-            .then(response => {
-                if (response.status === 201) {
-                    return response.json(); // Successfully created a player
-                } else {
-                    return response.json().then(errorData => {
-                        throw new Error(errorData.message);
-                    });
-                }
-            })
-            .then(player => {
-                // Display a success message or redirect to another page
-                document.getElementById("message").innerHTML = `Player ${player.user} created with score ${player.score}`;
-            })
-            .catch(error => {
-                // Display an error message
-                document.getElementById("message").innerHTML = `Error: ${error.message}`;
-            });
+            // Display a success message
+            document.getElementById("createPlayerForm").style.display = "none"; // Hide the form
+            startGame(); // Call your game start function here
         });
+        // Initialize the canvas and game parameters
         const canvas = document.getElementById('gameCanvas'); // create canvas element
         const ctx = canvas.getContext('2d'); // 2d rendering of canvas
         const player = { // define player properties
             x: canvas.width / 2,
-            y: canvas.height - 60,
-            width: 50,
-            height: 50,
-            speed: 20,
+            y: canvas.height - 40,
+            width: 40,
+            height: 40,
+            speed: 15,
             angle: 0
         };
         const bullets = []; // create an array to store bullets
@@ -172,11 +183,11 @@
         };
         // draw the player's spaceship
         function drawPlayer() {
-            ctx.save(); // Save the current context state
-            ctx.translate(player.x + player.width / 2, player.y + player.height / 2); // Move the context origin to the center of the player
-            ctx.rotate(player.angle); // Rotate the context based on the player's angle
-            ctx.drawImage(playerImage, -player.width / 2, -player.height / 2, player.width, player.height); // Draw the player centered
-            ctx.restore(); // Restore the context to the previous state
+            ctx.save(); // Save the canvas state
+            ctx.translate(player.x + player.width / 2, player.y + player.height / 2); // Translate to the center of the player
+            ctx.rotate(player.angle); // Rotate the canvas based on player's angle
+            ctx.drawImage(playerImage, -player.width / 2, -player.height / 2, player.width, player.height); // Draw the player image
+            ctx.restore();
         }
         // draw the enemy's spaceship
         function drawEnemy() {
@@ -203,7 +214,7 @@
         }
         // check for collisions between player, bullets, and enemy
         function checkCollision() {
-             if (
+            if (
                 player.x < enemy.x + enemy.width &&
                 player.x + player.width > enemy.x &&
                 player.y < enemy.y + enemy.height &&
@@ -221,17 +232,16 @@
                     enemy.x = Math.random() * (canvas.width - enemy.width);
                     enemy.y = 10;
                     bullets.splice(i, 1);
-                    score += 1; // increment the score when an enemy is hit
+                    score += 10; // increment the score when an enemy is hit
                 }
             }
         }
-        let killedEnemies = 0;
         const miniBoss = {
             x: 0,
             y: 0,
             width: 100,
             height: 100,
-            speed: 10,
+            speed: 15,
         };
         // Function to spawn the mini-boss
         function spawnMiniBoss() {
@@ -249,6 +259,9 @@
             miniBoss.x = Math.max(0, Math.min(canvas.width - miniBoss.width, miniBoss.x));
             miniBoss.y = Math.max(0, Math.min(canvas.height - miniBoss.height, miniBoss.y));
         }
+        setInterval(() => {
+            miniBoss.speed += 1; // Increase miniboss speed by 1 (you can adjust the increment as needed)
+        }, 5000);
         // Check for collisions with the mini-boss
         function checkMiniBossCollision() {
             if (
@@ -268,15 +281,31 @@
                 ) {
                     spawnMiniBoss(); // Respawn the mini-boss
                     bullets.splice(i, 1);
-                    score += 10; // Increment the score when mini-boss is hit
+                    score += 20; // Increment the score when mini-boss is hit
                 }
             }
         }
-        spawnMiniBoss();
-        // Modify the draw function to include the mini-boss
-        function draw() {
+        const playAgainButton = document.getElementById("playAgainButton");
+        playAgainButton.addEventListener("click", function () {
+            // Reset game variables
+            isGameOver = false;
+            score = 0;
+            timeLeft = 30;
+            player.x = canvas.width / 2;
+            player.y = canvas.height - 40;
+            // Hide the button and show the "Create Player" form
+            playAgainButton.style.display = "none";
+            document.getElementById("createPlayerForm").style.display = "block";
+            // Clear the canvas
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-            if (!isGameOver && timeLeft > 0) {
+            // Call your game start function again
+            startGame();
+        });
+        spawnMiniBoss();
+        // draw on the canvas
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height); // clear the canvas
+            if (!isGameOver && timeLeft > 0) { // if it is not game over and time is left
                 drawPlayer();
                 drawEnemy();
                 drawMiniBoss(); // Draw the mini-boss
@@ -284,13 +313,14 @@
                 drawBullets();
                 moveBullets();
                 checkCollision();
-                checkMiniBossCollision(); // Check for mini-boss collision
+                checkMiniBossCollision();
                 requestAnimationFrame(draw);
+                // display the score and time on the canvas
                 ctx.font = "20px Arial";
                 ctx.fillStyle = "white";
                 ctx.fillText("Score: " + score, 10, 30);
                 ctx.fillText("Time Left: " + timeLeft + "s", 10, 60);
-            } else if (!isGameOver && timeLeft === 0) {
+            } else if (!isGameOver && timeLeft === 0) { 
                 isGameOver = true;
                 ctx.font = "30px Arial";
                 ctx.fillStyle = "red";
@@ -301,49 +331,45 @@
                 ctx.fillStyle = "red";
                 ctx.fillText("Game Over", canvas.width / 2 - 80, canvas.height / 2);
                 ctx.fillText("Score: " + score, canvas.width / 2 - 60, canvas.height / 2 + 40);
+            } if (isGameOver) {
+                // Display game over message and score
+                ctx.font = "30px Arial";
+                ctx.fillStyle = "red";
+                ctx.fillText("Game Over", canvas.width / 2 - 80, canvas.height / 2);
+                ctx.fillText("Score: " + score, canvas.width / 2 - 60, canvas.height / 2 + 40);
+                // Show the "Play Again" button
+                console.log("Setting button to block");
+                playAgainButton.style.display = "block";
+                console.log("Button style: " + playAgainButton.style.display);
             }
         }
-        // Define an array to store spaceship images
         const playerImages = [
             'https://github.com/Ant11234/student/assets/40652645/15b4e3de-f9c4-4c70-adc9-d696cffd6ad7',
             'https://github.com/Ant11234/student/assets/40652645/97854bf1-907b-4a51-9de1-7064b7f296da',
             'https://github.com/Ant11234/student/assets/40652645/2122f367-aea5-4a97-bb5d-ace685929f77'
         ];
-        let currentImageIndex = 0; // Index to keep track of the current spaceship image
-        // In the keyDownHandler function, update the player image based on movement direction
-        let canShoot = true;
-        const cooldownTime = 500; // Adjust the cooldown time as needed (in milliseconds)
-        document.addEventListener("keydown", function (e) {
+        // function to handle user input (keyboard presses)
+        function keyDownHandler(e) {
             if (e.key == "Right" || e.key == "ArrowRight") { // if right key is pushed
                 if (player.x + player.width < canvas.width) { // if player is not on the very far right
-                    player.x += player.speed;
+                    player.x += player.speed; // moving with defined speed in the right direction
                     player.angle = Math.PI / 2;
-                    currentImageIndex = (currentImageIndex + 1) % playerImages.length;
-                    playerImage.src = playerImages[currentImageIndex];
                 }
             } else if (e.key == "Left" || e.key == "ArrowLeft") { // if left key is pushed
                 if (player.x > 0) { // if player is not on the very far left
-                    player.x -= player.speed;
+                    player.x -= player.speed; // moving with defined speed in left direction
                     player.angle = -Math.PI / 2;
                     // Switch to the previous spaceship image (cycling through the array)
-                    currentImageIndex = (currentImageIndex - 1 + playerImages.length) % playerImages.length;
-                    playerImage.src = playerImages[currentImageIndex];
                 }
-            } else if (e.key == " " && canShoot == true) { // if space is pushed
+            } else if (e.key == " ") { // if space is pushed
                 bullets.push({ // show bullets
                     x: player.x + player.width / 2 - 2.5, // from the middle of the player's icon
                     y: player.y, // from player's height
                     width: 5,
                     height: 10
                 });
-                playerImage.src = 'https://github.com/TayKimmy/CSA_Repo/assets/107821010/28c3e277-b292-43f0-bcef-5460b19689b7';
-                player.angle = 0;
-                canShoot = false; // Prevent shooting until the cooldown period is over
-                setTimeout(() => {
-                     canShoot = true;
-                }, cooldownTime);
             }
-        });
+        }
         // add keydown event listener to the document
         document.addEventListener("keydown", keyDownHandler, false);
         // Initial call to the draw() function
@@ -355,11 +381,50 @@
             } else {
                 clearInterval(timerInterval); // clear interval if game is over
             }
-        }, 1000); // 1000 ms - making sure it is every 1 second
+        }, 1000); // 100
+        createButton.addEventListener("click", () => {
+            username = input.value;
+            const postData = {
+                leaderboard: username,
+                score: score,
+            };
+            fetch(`http://localhost:8027/api/leaderboard/post/${username}/${score}`, {
+                    method: 'POST',
+                    mode: 'cors',
+                    cache: 'default',
+                    credentials: 'same-origin',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer my-token'
+                    },
+                    body: JSON.stringify(postData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                //
+            })
+            .catch(error => {
+                console.error("Error: " + error);
+            });
+        });
+        generateButton.addEventListener("click", () => {
+            fetch("http://localhost:8027/api/leaderboard/")
+            .then(response => response.json())
+            .then(data => {
+                leaderboardTable.innerHTML = ""; // Clear previous data
+                data.forEach(item => {
+                    const row = leaderboardTable.insertRow(-1);
+                    const cell1 = row.insertCell(0);
+                    const cell2 = row.insertCell(1);
+                    cell1.innerHTML = item.leaderboard;
+                    cell2.innerHTML = item.score;
+                    console.log(item.score);
+                });
+            })
+            .catch(error => {
+                console.error("Error:", error);
+            });
+        });
     </script>
 </body>
 </html>
-
-<!-- Enemy flying design -->
-
-<!-- https://github.com/Ant11234/student/assets/40652645/3bf0b840-7b21-428d-858b-3c668db352f6 -->
