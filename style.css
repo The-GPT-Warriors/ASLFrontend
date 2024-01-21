@@ -88,10 +88,6 @@ body {
     border: 5px solid #96c9ff;
     margin-top: 20px;
     font-size: 24px;
-    /* placeholder for text output from our model */
-    background-image: url("https://via.placeholder.com/600x50?text=Text+Output");
-    background-size: cover;
-    background-position: center;
   }
 
   .footer {
