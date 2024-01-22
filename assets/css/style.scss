@@ -3,107 +3,83 @@
 
 @import "{{ site.theme }}";
 
-// STYLING PREFERNCES for SITE
-// mixin used as a template for buttons
-  @mixin button {
-    width: auto;
-    height: auto;
-    border-radius: 10px;
-    background-color: #21807c;
-    border: 3px solid black;
-    font-size: 1.5em;
 
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    grid-column: span 1;
-    grid-row: span 1;
-
-    // Creates smooth animation effect
-    transition: all 0.5s; 
-  }
-    /* Style for the table */
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      border: 2px solid white;
-      border-radius: 10px;
-  }
-  /* Style for table headers */
-  th {
-      background-color: black;
-      color: white;
-      padding: 8px;
-  }
-  /* Style for table cells */
-  td {
-      border: 1px solid black;
-      padding: 8px;
-      text-align: center;
-      color: white;
-  }
-  /* define class for redifined button */
-  .button {
-    @include button;
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
   }
 
-   /* darkens the background color on hover to create a selecting effect */
-  .button:hover {
-    background-color: #373737;
+  body {
+    background-color: lightgrey;
+    font-family: Arial, sans-serif;
   }
 
-  /* "row style" is flexible size and aligns pictures in center */
-  .row {
-    align-items: center;
-    display: flex;
-  }
-
-  /* "column style" is one-third of the width with padding */
-  .column {
-    flex: 16.66%;
-    padding: 3px;
-  }
-  
-// STYLING FOR CALCULATOR
-  /* class to create the calculator's container; uses CSS grid dsiplay to partition off buttons */
-  .calculator-container { 
-    width: 90vw; /* this width and height is specified for mobile devices by default */
-    height: 80vh;
+  .container {
+    width: 80%;
+    max-width: 1200px;
     margin: 0 auto;
-  
-    display: grid;
-    grid-template-columns: repeat(4, 1fr); /* fr is a special unit; learn more here: https://css-tricks.com/introduction-fr-css-unit/  */
-    grid-template-rows: 0.5fr repeat(4, 1fr);
-    gap: 10px 10px;
-  }
-  
-  @media (min-width: 600px) { 
-    .calculator-container {
-        width: 40vw;
-        height: 80vh;
-    }
+    padding: 20px;
   }
 
-  /* styling for the calculator number button */
-  .calculator-number {
-    @extend .button;
+  .header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: white;
+    padding: 10px;
+  }
+  .title {
+    font-size: 36px;
+    font-weight: bold;
+    color: lightblue;
   }
 
-  /* styling for the calculator operation button */
-  .calculator-operation {
-    @extend .button;
-  }
-  
-  /* styling for the calculator clear button */
-  .calculator-clear {
-    @extend .button;
-    background-color: #e68b1c;
-  }
-  
-  /* styling for the calculator equals button */
-  .calculator-equals {
-    @extend .button;
-    background-color: #e70f0f;
+  .main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: white;
+    margin-top: 20px;
+    padding: 20px;
   }
 
+  .camera {
+    width: 600px;
+    height: 450px;
+    border: 5px solid lightblue;
+    /* placeholder for the camera feed */
+    background-image: url("");
+    background-size: cover;
+    background-position: center;
+  }
+  .logo {
+    width: 100px;
+    height: 100px;
+    object-fit: contain;
+  }
+  .text {
+    width: 600px;
+    height: 50px;
+    border: 5px solid lightblue;
+    margin-top: 20px;
+    font-size: 24px;
+    /* placeholder for text output from our model */
+    background-image: url("");
+    background-size: cover;
+    background-position: center;
+  }
+
+  .footer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: white;
+    margin-top: 20px;
+    padding: 10px;
+  }
+
+  .footer-text {
+    font-size: 18px;
+    color: lightblue;
+  }

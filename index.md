@@ -1,4 +1,15 @@
-<div class="index-header">
-
-
-Welcome to Cosmic Carnage!
+<body>
+  <div class="container">
+    <div class="header">
+      <img src="https://github.com/The-GPT-Warriors/ai-front/assets/109186517/8f289636-ccc8-402f-9bf0-1f466ef96436" alt="Logo" class="logo">
+      <h1 class="title">ASL Recognition</h1>
+    </div>
+    <div class="main">
+      <div class="camera"></div>
+      <div class="text"></div>
+    </div>
+    <div class="footer">
+      <p class="footer-text">Powered by The GPT Warriors</p>
+    </div>
+  </div>
+</body>
