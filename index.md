@@ -6,7 +6,7 @@
     </div>
     <div class="main">
       <div class="camera"></div>
-      <div class="text"></div>
+      <input class="text">Predictions from the model will go here</input>
     </div>
     <div class="footer">
       <p class="footer-text">Powered by The GPT Warriors</p>
