@@ -136,12 +136,12 @@ public class SignLanguagePerceptron extends JFrame {
         for (int ii = 0; ii < M; ii++) {
             double pred0 = -100000000;
             int s0 = 0;
-            for (int s = 0; s < 24; s++) {
+            for (int s = 0; s < 25; s++) {
                 double y_pred = weights[s][0];
                 for (int k = 0; k < lg1t - 1; k++) {
                     y_pred += weights[s][k + 1] * xt[ii][k + 1];
                 }
-                System.out.println("s=" + s + ", y_pred=" + y_pred + "letter=" + alphabet[s]);
+                System.out.println("s=" + s + ", letter=" + alphabet[s] + ", y_pred=" + y_pred);
                 if (y_pred > pred0) {
                     pred0 = y_pred;
                     s0 = s;
