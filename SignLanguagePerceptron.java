@@ -80,15 +80,15 @@ public class SignLanguagePerceptron extends JFrame {
         System.out.println(Arrays.toString(x[0]));
         System.out.println(Arrays.toString(x[1]));
 
-        double[][] weights = new double[24][lg1];
+        double[][] weights = new double[25][lg1];
         int[] digit = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24};
-        String[] alphabet = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y"};
+        String[] alphabet = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y"};
         int m = weights[0].length - 1;
         System.out.println(m + ", " + x.length);
 
         double rate = 0.5;
         int epoch = 50;
-        for (int s = 0; s < 24; s++) {
+        for (int s = 0; s < 25; s++) {
             for (int ii = 0; ii < epoch; ii++) {
                 double error = 0.0;
                 for (int i = 0; i < x.length; i++) {
@@ -141,13 +141,13 @@ public class SignLanguagePerceptron extends JFrame {
                 for (int k = 0; k < lg1t - 1; k++) {
                     y_pred += weights[s][k + 1] * xt[ii][k + 1];
                 }
-                System.out.println("s=" + s + ", y_pred=" + y_pred);
+                System.out.println("s=" + s + ", y_pred=" + y_pred + "letter=" + alphabet[s]);
                 if (y_pred > pred0) {
                     pred0 = y_pred;
                     s0 = s;
                 }
             }
-            System.out.println("prediction test data =" + s0 + " actual label =" + xt[ii][0]);
+            System.out.println("prediction test data =" + s0 + " actual label =" + xt[ii][0] + " prediction letter =" + alphabet[s0]);
 
             for (int i = 0; i < 28; i++) {
                 for (int j = 0; j < 28; j++) {
