@@ -12,4 +12,21 @@
       <p class="footer-text">Powered by The GPT Warriors</p>
     </div>
   </div>
+  <script>
+    const video = document.createElement('video');
+    const constraints = {
+      video: true
+    };
+    navigator.mediaDevices.getUserMedia(constraints)
+      .then((stream) => {
+        video.srcObject = stream;
+        video.onloadedmetadata = () => {
+          video.play();
+        };
+        document.querySelector('.camera').appendChild(video);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  </script>
 </body>
