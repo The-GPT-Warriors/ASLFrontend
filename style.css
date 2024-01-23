@@ -67,12 +67,6 @@ body {
     margin-top: 20px;
     padding: 20px;
   }
-  .camera {
-    width: 600px;
-    height: 450px;
-    border: 5px solid #96c9ff;
-    background-position: center;
-  }
   .logo {
     width: 100px;
     height: 100px;
@@ -99,3 +93,7 @@ body {
     font-size: 18px;
     color: #96c9ff;
   }
+  video {
+    width: 600px;
+    height: 450px;
+}
