@@ -94,7 +94,7 @@ permalink: /signup
 <body>
     <div class="main">
         <div class="form-container">
-            <form>
+            <form id="signup_form">
                 <input type="text" placeholder="Name" id="name" required>
                 <input type="date" placeholder="Birthday" id="dob" required>
                 <input type="text" placeholder="Username" id="username" required>
@@ -105,46 +105,35 @@ permalink: /signup
         </div>
     </div>
 <script>
+    document.getElementById("signup_form").addEventListener("submit", function (event) {
+            event.preventDefault();
+            signup_user();
+        });
     function signup_user() {
-    var myHeaders = new Headers();
-    myHeaders.append("Content-Type", "application/json");
-    var raw = JSON.stringify({
-        "email": document.getElementById("signInEmailInput").value,
-        "password": document.getElementById("signInPasswordInput").value
-    });
-    console.log(raw);
-    var requestOptions = {
-        method: 'POST',
-        headers: myHeaders,
-        credentials: 'include',
-        body: raw,
-        redirect: 'follow'
-    };
-    fetch("http://localhost:8085/authenticate", requestOptions)
-    .then(response => {
-        if (!response.ok) {
-            const errorMsg = 'Login error: ' + response.status;
-            console.log(errorMsg);
-            switch (response.status) {
-                case 401:
-                    alert("Incorrect username or password");
-                    break;
-                case 403:
-                    alert("Access forbidden. You do not have permission to access this resource.");
-                    break;
-                case 404:
-                    alert("User not found. Please check your credentials.");
-                    break;
-                default:
-                    alert("Signup failed. Please try again later.");
-            }
-            return Promise.reject('Login failed');
+        var requestOptions = {
+            method: 'POST',
+            mod: 'cors',
+            cache: 'no-cache'
+        };
+        let email =  document.getElementById("email").value;
+        let password = document.getElementById("password").value;
+        let name = document.getElementById("name").value;
+        let dob = document.getElementById("dob").value;
+        let username = document.getElementById("username").value
         }
-        return response.text()
-    })
-    .then(result => {
-        console.log(result);
-        window.location.href = "http://127.0.0.1:4100/Login-Lesson/account";
-    })
-    .catch(error => console.error('Error during login:', error));
-}
+        let requestURL = `http://localhost:8085/api/person/post?email=${email}&password=${password}&name=${name}&dob=${dob}&username=${username}`;
+        console.log(requestURL)
+        fetch(requestURL, requestOptions)
+        .then(response => {
+                if (!response.ok) {
+                    return response.text().then(errorMsg => {
+                        alert('Error: ' + errorMsg);
+                    });
+                }
+                alert("Signup Complete");
+                window.location.href = "https://the-gpt-warriors.github.io/ASLFrontend/login";
+            })
+            .catch(error => {
+                alert('An unexpected error occurred: ' + error.message);
+            });
+</script>

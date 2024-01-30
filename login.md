@@ -101,3 +101,47 @@ permalink: /login
             </form>
         </div>
     </div>
+<script>
+    function login_user() {
+    var myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+    var raw = JSON.stringify({
+        "username": document.getElementById("username").value,
+        "password": document.getElementById("password").value
+    });
+    console.log(raw);
+    var requestOptions = {
+        method: 'POST',
+        headers: myHeaders,
+        credentials: 'include',
+        body: raw,
+        redirect: 'follow'
+    };
+    fetch("http://localhost:8085/authenticate", requestOptions)
+    .then(response => {
+        if (!response.ok) {
+            const errorMsg = 'Login error: ' + response.status;
+            console.log(errorMsg);
+            switch (response.status) {
+                case 401:
+                    alert("Incorrect username or password");
+                    break;
+                case 403:
+                    alert("Access forbidden. You do not have permission to access this resource.");
+                    break;
+                case 404:
+                    alert("User not found. Please check your credentials.");
+                    break;
+                default:
+                    alert("Login failed. Please try again later.");
+            }
+            return Promise.reject('Login failed');
+        }
+        return response.text()
+    })
+    .then(result => {
+        console.log(result);
+        window.location.href = "https://the-gpt-warriors.github.io/ASLFrontend/account";
+    })
+    .catch(error => console.error('Error during login:', error));
+}
