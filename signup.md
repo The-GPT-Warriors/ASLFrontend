@@ -136,7 +136,7 @@ permalink: /signup
                     alert("User not found. Please check your credentials.");
                     break;
                 default:
-                    alert("Login failed. Please try again later.");
+                    alert("Signup failed. Please try again later.");
             }
             return Promise.reject('Login failed');
         }
