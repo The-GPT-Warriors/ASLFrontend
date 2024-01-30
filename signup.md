@@ -95,12 +95,56 @@ permalink: /signup
     <div class="main">
         <div class="form-container">
             <form>
-                <input type="text" placeholder="Name" required>
-                <input type="date" placeholder="Birthday" required>
-                <input type="text" placeholder="Username" required>
-                <input type="email" placeholder="Email" required>
-                <input type="password" placeholder="Password" required>
+                <input type="text" placeholder="Name" id="name" required>
+                <input type="date" placeholder="Birthday" id="dob" required>
+                <input type="text" placeholder="Username" id="username" required>
+                <input type="email" placeholder="Email" id="email" required>
+                <input type="password" placeholder="Password" id="password" required>
                 <button type="submit">Sign Up</button>
             </form>
         </div>
     </div>
+<script>
+    function signup_user() {
+    var myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+    var raw = JSON.stringify({
+        "email": document.getElementById("signInEmailInput").value,
+        "password": document.getElementById("signInPasswordInput").value
+    });
+    console.log(raw);
+    var requestOptions = {
+        method: 'POST',
+        headers: myHeaders,
+        credentials: 'include',
+        body: raw,
+        redirect: 'follow'
+    };
+    fetch("http://localhost:8085/authenticate", requestOptions)
+    .then(response => {
+        if (!response.ok) {
+            const errorMsg = 'Login error: ' + response.status;
+            console.log(errorMsg);
+            switch (response.status) {
+                case 401:
+                    alert("Incorrect username or password");
+                    break;
+                case 403:
+                    alert("Access forbidden. You do not have permission to access this resource.");
+                    break;
+                case 404:
+                    alert("User not found. Please check your credentials.");
+                    break;
+                default:
+                    alert("Login failed. Please try again later.");
+            }
+            return Promise.reject('Login failed');
+        }
+        return response.text()
+    })
+    .then(result => {
+        console.log(result);
+        window.location.href = "http://127.0.0.1:4100/Login-Lesson/account";
+    })
+    .catch(error => console.error('Error during login:', error));
+}
