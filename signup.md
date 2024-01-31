@@ -63,7 +63,7 @@ permalink: /signup
         }
 
         button {
-            background-color: #96c9ff;
+            background-color: #3EB8F9;
             color: white;
             padding: 10px;
             border: none;
