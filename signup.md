@@ -99,7 +99,6 @@
             event.preventDefault();
             signup_user();
         });
-
         function signup_user() {
             var requestOptions = {
                 method: 'POST',
@@ -111,7 +110,6 @@
             let name = document.getElementById("name").value;
             let dob = document.getElementById("dob").value;
             let username = document.getElementById("username").value;
-
             let requestURL = `http://localhost:8085/api/person/post?email=${email}&password=${password}&name=${name}&dob=${dob}&username=${username}`;
             console.log(requestURL);
             fetch(requestURL, requestOptions)
