@@ -112,7 +112,7 @@ public class SignLanguagePerceptron extends JFrame {
         }
 
         // Further logic for testing and visualization can be added here
-        List<List<Integer>> test = readCSV("sign_mnist_test.csv");
+        List<List<Integer>> test = readCSV("grayscale_image_data.csv");
         int lgt = test.size();
         int lg1t = test.get(0).size();
         System.out.println(lgt + ", " + lg1t);
@@ -128,7 +128,7 @@ public class SignLanguagePerceptron extends JFrame {
 
         // Assuming 'N' and 'weights' are defined elsewhere in your code
  //       int N = 24; // Number of classes
-        int M = 5; // Number of test images to show
+        int M = 1; // Number of test images to show
  //       double[][] weights = new double[N][lg1]; // Dummy initialization
 
         int[][][] ima = new int[M][28][28];
