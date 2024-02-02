@@ -22,7 +22,7 @@ permalink: /account
                   console.log(errorMsg);
                   switch (response.status) {
                       case 401:
-                          alert("Please log into or make an account");
+                          alert("Please log into your account");
                           window.location.href = "https://the-gpt-warriors.github.io/ASLFrontend/login";
                           break;
                       case 403:
@@ -41,7 +41,6 @@ permalink: /account
       .then(data => {
         const userDataContainer = document.getElementById("userData");
         userDataContainer.innerHTML = `
-          <img src="/Login-Lesson/images/defaultUser.png" width="250" height="250">
           <h1><strong>${data.name}</strong></h1>
           <p>Email: ${data.email}</p>
           <p>Age: ${data.age}</p>
