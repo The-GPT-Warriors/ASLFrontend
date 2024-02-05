@@ -192,7 +192,4 @@ public class SignLanguagePerceptron extends JFrame {
         }
         return data;
     }
-
-
-
 }
