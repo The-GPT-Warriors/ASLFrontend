@@ -11,9 +11,15 @@
 </header>
 
 <script>
-  function isLoggedIn() {
-    console.log(document.cookie);
-    return document.cookie.includes('logged_in=yes; path=/');
+  function isLoggedIn(cookieName) {
+    const cookies = document.cookie.split(';');
+    for (const cookie of cookies) {
+      const [name, value] = cookie.trim().split('=');
+      if (name === cookieName) {
+        return true;
+      }
+    }
+    return false;
   }
 
   function updateHeader() {
@@ -22,7 +28,7 @@
     const login = document.getElementById('login');
     const home = document.getElementById('home');
 
-    if (isLoggedIn()) {
+    if (isLoggedIn('logged_in')) {
       navbar.innerHTML=``;
       navbar.innerHTML = `
         <li class="nav-item"><a href="{{site.baseurl}}/main">Home</a></li>

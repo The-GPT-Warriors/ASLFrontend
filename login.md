@@ -12,7 +12,7 @@ permalink: /login
                 <input type="password" placeholder="Password" id="password" required>
                 <button class="button1" type="submit">Login</button>
             </form>
-            <center><button class="button2" onclick="window.location.href='https://the-gpt-warriors.github.io/ASLFrontend/signup'">Create an Account</button><center>
+            <center><button class="button2" onclick="window.location.href='{{site.baseurl}}/signup'">Create an Account</button><center>
         </div>
     </div>
 <script>
