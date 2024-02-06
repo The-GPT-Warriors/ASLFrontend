@@ -119,21 +119,22 @@ permalink: /account
         .then(data => {
             const userDataContainer = document.getElementById("userDataContainer");
             userDataContainer.innerHTML = ``
+            console.log(data);
             data.forEach(user => {
-            const row = document.createElement('tr'); 
-            const adminRole = user.roles.find(role => role.name === "ROLE_ADMIN");
-            row.innerHTML = `
-                <td>${user.id}</td>
-                <td>${user.name}</td>
-                <td>${user.username}</td>
-                <td>${user.email}</td>
-                <td>${user.age}</td>
-                <td>${adminRole ? 'Admin' : capitalizeFirstLetter(user.roles[0].name.replace('ROLE_', '').toLowerCase())}</td>
-                <td></td
-            `;
-            const actions = row.querySelector('td:last-child');
-            actions.appendChild(createDelete(user.id, adminRole));
-            userDataContainer.appendChild(row);
+                const row = document.createElement('tr'); 
+                const adminRole = user.roles.find(role => role.name === "ROLE_ADMIN");
+                row.innerHTML = `
+                    <td>${user.id}</td>
+                    <td>${user.name}</td>
+                    <td>${user.username}</td>
+                    <td>${user.email}</td>
+                    <td>${user.age}</td>
+                    <td>${adminRole ? 'Admin' : capitalizeFirstLetter(user.roles[0].name.replace('ROLE_', '').toLowerCase())}</td>
+                    <td></td
+                `;
+                const actions = row.querySelector('td:last-child');
+                actions.appendChild(createDelete(user.id, adminRole));
+                userDataContainer.appendChild(row);
             });
         })
             .catch(error => console.log('error', error));
@@ -160,7 +161,7 @@ permalink: /account
                 cache: 'default',
                 credentials: 'include',
             };
-            fetch('http://localhost:8085/api/person/delete/${userID}', requestOptions)
+            fetch('http://localhost:8085/api/person/delete/${userId}', requestOptions)
                 .then(response => {
                     if (!response.ok) {
                         const errorMsg = 'Delete user error: ' + response.status;
