@@ -12,7 +12,8 @@
 
 <script>
   function isLoggedIn(cookieName) {
-    const cookies = document.cookie.split(';');
+    const cookies = document.cookie.split(' ');
+    console.log(cookies);
     for (const cookie of cookies) {
       const [name, value] = cookie.trim().split('=');
       if (name === cookieName) {
@@ -28,19 +29,28 @@
     const login = document.getElementById('login');
     const home = document.getElementById('home');
 
-    if (isLoggedIn('logged_in')) {
-      navbar.innerHTML=``;
-      navbar.innerHTML = `
-        <li class="nav-item"><a href="{{site.baseurl}}/main">Home</a></li>
-        <li class="nav-item"><a href="{{site.baseurl}}/game">Game</a></li>
-        <li class="nav-item"><a href="{{site.baseurl}}/leaderboard">Leaderboard</a></li>
-        <li class="nav-item"><a href="{{site.baseurl}}/account">Account</a></li>`;
-    } else {
-      navbar.innerHTML = `
-        <li class="nav-item" id="login"><a href="{{site.baseurl}}/login">Login</a></li>
-        <li class="nav-item" id="home"><a href="{{site.baseurl}}/">Home</a></li>
+    fetch("http://localhost:8085/api/person/jwt", {
+      method: "GET",
+      credentials: "include",
+    })
+      .then((response) => {
+        if (response.ok) {
+          navbar.innerHTML=``;
+          navbar.innerHTML = `
+            <li class="nav-item"><a href="{{site.baseurl}}/main">Home</a></li>
+            <li class="nav-item"><a href="{{site.baseurl}}/game">Game</a></li>
+            <li class="nav-item"><a href="{{site.baseurl}}/leaderboard">Leaderboard</a></li>
+            <li class="nav-item"><a href="{{site.baseurl}}/account">Account</a></li>;
       `;
-    }
+    } else {
+        navbar.innerHTML = `
+          <li class="nav-item" id="login"><a href="{{site.baseurl}}/login">Login</a></li>
+          <li class="nav-item" id="home"><a href="{{site.baseurl}}/">Home</a></li>`
+        }
+      })
+      .catch((error) => {
+        console.error("Error checking login status:", error);
+      });
   }
 
   updateHeader();
