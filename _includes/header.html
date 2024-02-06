@@ -12,7 +12,8 @@
 
 <script>
   function isLoggedIn() {
-    return document.cookie.includes('logged_in=yes');
+    return document.cookie.includes('logged_in=yes; path=/');
+    console.log(document.cookie);
   }
 
   function updateHeader() {
