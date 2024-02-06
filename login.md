@@ -59,7 +59,8 @@ permalink: /login
     })
     .then(result => {
         console.log(result);
-        window.location.href = "https://the-gpt-warriors.github.io/ASLFrontend/account";
+        isLoggedIn = true;
+        window.location.href = "{{site.baseurl}}/account";
     })
     .catch(error => console.error('Error during login:', error));
 }
