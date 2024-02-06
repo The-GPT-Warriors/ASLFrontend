@@ -1,7 +1,7 @@
 ---
 layout: default
-title: Mnist Format
-permalink: /mnist
+title: Data Format Converter
+permalink: /dformat
 ---
 <html>
 <body>
