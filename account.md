@@ -92,7 +92,7 @@ permalink: /account
         cache: 'default',
         credentials: 'include',
       };
-      fetch("http://localhost:8085/api/person", requestOptions)
+      fetch("http://localhost:8085/api/person/", requestOptions)
         .then(response => {
                 if (!response.ok) {
                     const errorMsg = 'Login error: ' + response.status;
