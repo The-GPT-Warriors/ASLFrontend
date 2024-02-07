@@ -16,6 +16,7 @@ permalink: /account
                 </div>
                 <div class="profile-details">
                     <button onclick="updateProfile()">Update</button>
+                    <button id="deleteProfile" onclick="deleteSelf()">Delete Profile</button>
                 </div>
             </div>
             <div></div>
@@ -70,6 +71,9 @@ permalink: /account
             return response.json();
         })
         .then(data => {
+            let deleteId = data.id;
+            console.log(deleteId);
+            const deleteButton = document.getElementById("deleteProfile");
             const userProfileSection = document.getElementById("profileSection");
             const profilePicture = document.createElement('div');
             const profileDetails = document.createElement('div');
@@ -129,7 +133,7 @@ permalink: /account
                     <td>${user.username}</td>
                     <td>${user.email}</td>
                     <td>${user.age}</td>
-                    <td>${adminRole ? 'Admin' : capitalizeFirstLetter(user.roles[0].name.replace('ROLE_', '').toLowerCase())}</td>
+                    <td>${adminRole ? 'Admin' : (user.roles && user.roles.length > 0 ? capitalizeFirstLetter(user.roles[0].name.replace('ROLE_', '').toLowerCase()) : 'None')}</td>
                     <td></td
                 `;
                 const actions = row.querySelector('td:last-child');
@@ -189,6 +193,41 @@ permalink: /account
                 })
                 .catch(error => console.log('error', error));
         }
+        function deleteSelf(id) {
+            const requestOptions = {
+                method: 'DELETE',
+                mode: 'cors',
+                cache: 'default',
+                credentials: 'include',
+            }
+            fetch('http://localhost:8085/api/person/delete/self', requestOptions)
+                .then(response => {
+                    if (!response.ok) {
+                        const errorMsg = 'Delete user error: ' + response.status;
+                        console.log(errorMsg);
+                        switch (response.status) {
+                            case 401:
+                                alert("Please log into your account");
+                                window.location.href = "{{site.baseurl}}/login";
+                                break;
+                            case 403:
+                                alert("Access forbidden. You do not have permission to delete this user.");
+                                break;
+                            case 404:
+                                alert("User not found. Please check the user ID.");
+                                break;
+                            default:
+                                alert("Delete user failed. Please try again later.");
+                        }
+                        return Promise.reject('Delete user failed');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('User deleted successfully:', data);
+                })
+                .catch(error => console.log('error', error));
+        }
         function createDelete(userId, isAdmin) {
             const deleteButton = document.createElement('button');
             deleteButton.innerText = 'Delete';
@@ -214,7 +253,7 @@ permalink: /account
             },
             redirect: 'follow',
             };
-            fetch("http://localhost:8085/api/person/logout", requestOptions)
+            fetch("http://localhost:8085/logout", requestOptions)
             .then(response => {
                 if (!response.ok) {
                 const errorMsg = 'Sign Out error: ' + response.status;
