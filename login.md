@@ -62,8 +62,8 @@ permalink: /login
             box-sizing: border-box;
         }
 
-        button {
-            background-color: #96c9ff;
+        .button1 {
+            background-color: #3EB8F9;
             color: white;
             padding: 10px;
             border: none;
@@ -72,8 +72,29 @@ permalink: /login
             font-weight: bold;
         }
 
-        button:hover {
+        .button1:hover {
             background-color: #037dff;
+        }
+        
+        .button2 {
+            margin-top: 30px;
+            background-color: white;
+            color: #3EB8F9;
+            padding: 5px;
+            border-color: #3EB8F9;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: border-color 0.3s;
+        }
+
+        .button2:hover {
+            background-color: #DDF3FE;
+            color: #3EB8F9;
+            border-color: #3EB8F9;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
         }
 
         .footer {
@@ -94,10 +115,59 @@ permalink: /login
 <body>
     <div class="main">
         <div class="form-container">
-            <form>
-                <input type="text" placeholder="Username" required>
-                <input type="password" placeholder="Password" required>
-                <button type="submit">Login</button>
+            <form id="login_form">
+                <input type="text" placeholder="Username" id="username" required>
+                <input type="password" placeholder="Password" id="password" required>
+                <button class="button1" type="submit">Login</button>
             </form>
+            <center><button class="button2" onclick="window.location.href='https://the-gpt-warriors.github.io/ASLFrontend/signup'">Create an Account</button><center>
         </div>
     </div>
+<script>
+    document.getElementById("login_form").addEventListener("submit", function (event) {
+            event.preventDefault();
+            login_user();
+        });
+    function login_user() {
+    var myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+    var raw = JSON.stringify({
+        "username": document.getElementById("username").value,
+        "password": document.getElementById("password").value
+    });
+    console.log(raw);
+    var requestOptions = {
+        method: 'POST',
+        headers: myHeaders,
+        credentials: 'include',
+        body: raw,
+        redirect: 'follow'
+    };
+    fetch("http://localhost:8085/authenticate", requestOptions)
+    .then(response => {
+        if (!response.ok) {
+            const errorMsg = 'Login error: ' + response.status;
+            console.log(errorMsg);
+            switch (response.status) {
+                case 401:
+                    alert("Incorrect username or password");
+                    break;
+                case 403:
+                    alert("Access forbidden. You do not have permission to access this resource.");
+                    break;
+                case 404:
+                    alert("User not found. Please check your credentials.");
+                    break;
+                default:
+                    alert("Login failed. Please try again later.");
+            }
+            return Promise.reject('Login failed');
+        }
+        return response.text()
+    })
+    .then(result => {
+        console.log(result);
+        window.location.href = "https://the-gpt-warriors.github.io/ASLFrontend/account";
+    })
+    .catch(error => console.error('Error during login:', error));
+}
