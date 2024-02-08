@@ -1,13 +1,4 @@
-<head>
-    <title>ASL Recognition</title>
-</head>
-<body>
-  <div class="container">
-    <div class="header">
-      <img src="https://github.com/The-GPT-Warriors/ai-front/assets/109186517/8f289636-ccc8-402f-9bf0-1f466ef96436" alt="Logo" class="logo">
-      <h1 class="title">ASL Recognition</h1>
-    </div>
-    <div class="main">
+
       <div class="camera"></div>
       <input class="text" placeholder="Predictions from the model will go here" readonly>
       <div id="timer" style="color: black;">Next capture in: 2 seconds</div>
