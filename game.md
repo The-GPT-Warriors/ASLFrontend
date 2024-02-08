@@ -5,7 +5,7 @@ permalink: /game
 ---
 
 <body>
-    <div class="container">
+  <div class="container">
     <div class="header">
       <img src="https://github.com/The-GPT-Warriors/ai-front/assets/109186517/8f289636-ccc8-402f-9bf0-1f466ef96436" alt="Logo" class="logo">
       <h1 class="title">ASL Recognition Game</h1>
@@ -13,7 +13,6 @@ permalink: /game
     </div>
     <div class="main">
       <div class="camera" id="camera">
-        <!-- Start Game button will be initially visible -->
         <button id="startButton" style="font-size: 20px; padding: 10px 20px;">Start Game</button>
       </div>
       <div id="prediction">Predictions from the model will go here</div>
@@ -43,6 +42,7 @@ permalink: /game
     'images/G.png',
     'images/H.png',
     'images/I.png',
+    'images/J.png',
     'images/K.png',
     'images/L.png',
     'images/M.png',
@@ -57,17 +57,17 @@ permalink: /game
     'images/V.png',
     'images/W.png',
     'images/X.png',
-    'images/Y.png'
+    'images/Y.png',
+    'images/Z.png'
   ];
 
   const startButton = document.getElementById('startButton');
   startButton.addEventListener('click', startGameFlow);
 
   function startGameFlow() {
-    startButton.style.display = 'none'; // Hide the start button
+    startButton.style.display = 'none';
     startInitialCountdown();
   }
-
 
   function startInitialCountdown() {
     let countdown = 3;
@@ -91,7 +91,7 @@ permalink: /game
     const randomIndex = Math.floor(Math.random() * aslSymbols.length);
     const symbolPath = aslSymbols[randomIndex];
     document.querySelector('.camera').innerHTML = `<img src="${symbolPath}" alt="ASL Symbol" style="width: 640px; height: 480px;">`;
-    setTimeout(initializeWebcam, 500); // Wait 2 seconds before initializing the webcam
+    setTimeout(initializeWebcam, 500);
   }
 
   function initializeWebcam() {
@@ -106,7 +106,7 @@ permalink: /game
           video.play();
           document.querySelector('.camera').innerHTML = '';
           document.querySelector('.camera').appendChild(video);
-          setTimeout(captureGestureAndCheckResult, 1500); // 2 seconds to capture user's gesture
+          setTimeout(captureGestureAndCheckResult, 1500);
         };
       })
       .catch((err) => {
@@ -115,9 +115,8 @@ permalink: /game
   }
 
   function captureGestureAndCheckResult() {
-    // Placeholder for gesture capture logic
     console.log("Capture user's gesture and check result");
-    const isCorrect = Math.random() > 0.5; // Simulated result
+    const isCorrect = Math.random() > 0.5;
     checkRecognitionResult({ isCorrect });
   }
 
@@ -130,7 +129,7 @@ permalink: /game
     }
     updateScoreboard();
     if (isGameStarted) {
-      setTimeout(displayRandomASLSymbol, 1000); // Loop to display another symbol
+      setTimeout(displayRandomASLSymbol, 1000);
     }
   }
 
@@ -153,25 +152,18 @@ permalink: /game
     }, 1000);
   }
 
-  function startGame() {
-    if (!isGameStarted) {
-      isGameStarted = true;
-      startInitialCountdown();
-      // startGameTimer(); // Consider when to start the game timer
-    }
-  }
-
   function endGame() {
-    isGameStarted = false; // Prevent new symbols from being displayed
+    isGameStarted = false;
     updateCameraDisplay(`<button id="restartButton" style="font-size: 20px; padding: 10px 20px;">Restart Game</button>`);
     const restartButton = document.getElementById('restartButton');
     restartButton.addEventListener('click', () => {
-      score = 0; // Reset score
-      streak = 0; // Reset streak
-      updateScoreboard(); // Update scoreboard to show reset values
-      startGameFlow(); // Restart the game flow
+      score = 0;
+      streak = 0;
+      updateScoreboard();
+      startGameFlow();
     });
     alert("Time's up! Your score is " + score + " with a streak of " + streak + ".");
+    updateLeaderboard(score, streak); // Call to update the leaderboard after the game ends
   }
 
   function updateCameraDisplay(content) {
@@ -179,8 +171,31 @@ permalink: /game
     cameraDiv.innerHTML = content;
   }
 
+  function updateLeaderboard(score, streak) {
+  const userName = sessionStorage.getItem('userName'); // Assuming username is stored in session storage
+  const token = sessionStorage.getItem('token'); // Assuming JWT token is stored in session storage
+
+  fetch(`http://localhost:8085/api/leaderboard/update/${userName}/${score}/${streak}`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    }
+  })
+  .then(response => {
+    if (!response.ok) {
+      throw new Error('Failed to update leaderboard');
+    }
+    return response.json();
+  })
+  .then(data => {
+    console.log('Leaderboard updated:', data);
+  })
+  .catch(error => console.error('Error updating leaderboard:', error));
+}
 </script>
-  <style>
+
+<style>
   body, .container {
     display: flex;
     flex-direction: column;
@@ -188,14 +203,13 @@ permalink: /game
     justify-content: center;
   }
 
-   #startButton {
+  #startButton {
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
     cursor: pointer;
   }
-
 
   .camera {
     width: 640px;
@@ -228,6 +242,6 @@ permalink: /game
     border-radius: 5px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.2);
   }
-  /* Additional styles as needed */
 </style>
 </body>
+
