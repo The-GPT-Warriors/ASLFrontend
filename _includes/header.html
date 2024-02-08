@@ -12,6 +12,7 @@
 
 <script>
   function isLoggedIn() {
+    console.log(document.cookie);
     return document.cookie.includes('logged_in=yes');
   }
 
