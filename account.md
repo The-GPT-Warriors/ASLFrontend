@@ -123,6 +123,7 @@ permalink: /account
                 <td>${user.username}</td>
                 <td>${user.email}</td>
                 <td>${formatDOB(user.dob)}</td>
+                <td>${user.roles}</td>
             `;
             userDataContainer.appendChild(row);
             });
