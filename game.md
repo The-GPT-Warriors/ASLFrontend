@@ -13,7 +13,8 @@ permalink: /game
     </div>
     <div class="main">
       <div class="camera" id="camera">
-        <button id="startButton" style="font-size: 20px; padding: 10px 20px; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">Start Game</button>
+        <!-- Start Game button will be initially visible -->
+        <button id="startButton" style="font-size: 20px; padding: 10px 20px;">Start Game</button>
       </div>
       <div id="prediction">Predictions from the model will go here</div>
     </div>
@@ -29,6 +30,7 @@ permalink: /game
 <script>
   let score = 0;
   let streak = 0;
+  let gameTimerId;
   let isGameStarted = false;
 
   const aslSymbols = [
@@ -58,23 +60,29 @@ permalink: /game
     'images/Y.png'
   ];
 
-  document.getElementById('startButton').addEventListener('click', function() {
-    this.style.display = 'none'; // Hide the start button
-    document.getElementById('timer').style.display = 'block'; // Show the timer
-    startGame();
-  });
+  const startButton = document.getElementById('startButton');
+  startButton.addEventListener('click', startGameFlow);
+
+  function startGameFlow() {
+    startButton.style.display = 'none'; // Hide the start button
+    startInitialCountdown();
+  }
+
 
   function startInitialCountdown() {
-    let countdown = 3; // 3 seconds for the initial countdown
-    const cameraDiv = document.querySelector('.camera');
-    cameraDiv.innerHTML = `<span style="color: white; font-size: 48px;">${countdown}</span>`;
-    const countdownInterval = setInterval(() => {
+    let countdown = 3;
+    updateCameraDisplay(`<span style="color: white; font-size: 48px;">${countdown}</span>`);
+    let countdownTimerId = setInterval(() => {
       countdown--;
       if (countdown > 0) {
-        cameraDiv.innerHTML = `<span style="color: white; font-size: 48px;">${countdown}</span>`;
+        updateCameraDisplay(`<span style="color: white; font-size: 48px;">${countdown}</span>`);
       } else {
-        clearInterval(countdownInterval);
-        displayRandomASLSymbol();
+        clearInterval(countdownTimerId);
+        if (!isGameStarted) {
+          isGameStarted = true;
+          startGameTimer();
+          displayRandomASLSymbol();
+        }
       }
     }, 1000);
   }
@@ -132,9 +140,10 @@ permalink: /game
   }
 
   function startGameTimer() {
-    let timeLeft = 60; // 60 seconds for the game
+    let timeLeft = 60;
+    document.getElementById('timer').style.display = 'block';
     document.getElementById('timer').textContent = timeLeft;
-    let gameTimerId = setInterval(() => {
+    gameTimerId = setInterval(() => {
       timeLeft--;
       document.getElementById('timer').textContent = timeLeft;
       if (timeLeft <= 0) {
@@ -153,8 +162,21 @@ permalink: /game
   }
 
   function endGame() {
+    isGameStarted = false; // Prevent new symbols from being displayed
+    updateCameraDisplay(`<button id="restartButton" style="font-size: 20px; padding: 10px 20px;">Restart Game</button>`);
+    const restartButton = document.getElementById('restartButton');
+    restartButton.addEventListener('click', () => {
+      score = 0; // Reset score
+      streak = 0; // Reset streak
+      updateScoreboard(); // Update scoreboard to show reset values
+      startGameFlow(); // Restart the game flow
+    });
     alert("Time's up! Your score is " + score + " with a streak of " + streak + ".");
-    // Here, integrate with the leaderboard update logic
+  }
+
+  function updateCameraDisplay(content) {
+    const cameraDiv = document.querySelector('.camera');
+    cameraDiv.innerHTML = content;
   }
 
 </script>
