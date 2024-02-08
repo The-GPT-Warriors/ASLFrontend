@@ -6,15 +6,15 @@ permalink: /account
 <body>
   <div class="main">
         <div class="container">
+            <div class="header">
+                <div class="title">Account</div>
+            </div>
             <div class="profile-section" id="profileSection">
                 <div class="profile-picture">
                     <img src="https://github.com/The-GPT-Warriors/ASLFrontend/assets/107821010/52cd3a28-b6b5-44d2-a9d8-a1f7c50410c0" alt="Profile Picture">
                 </div>
                 <div class="profile-details">
                 </div>
-            </div>
-            <div class="header">
-                <div class="title">Account</div>
             </div>
             <div></div>
             <table>
@@ -25,6 +25,8 @@ permalink: /account
                         <th>Username</th>
                         <th>Email</th>
                         <th>Age</th>
+                        <th>Role</th>
+                        <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody id="userDataContainer">
@@ -50,7 +52,7 @@ permalink: /account
                     switch (response.status) {
                         case 401:
                             alert("Please log into your account");
-                            window.location.href = "https://the-gpt-warriors.github.io/ASLFrontend/login";
+                            window.location.href = "{{site.baseurl}}/login";
                             break;
                         case 403:
                             alert("Access forbidden. You do not have permission to access this resource.");
@@ -66,16 +68,11 @@ permalink: /account
             return response.json();
         })
         .then(data => {
-            const userProfileSection = document.getElementById("userProfileSection");
-            userProfileSection.innerHTML = '';
+            const userProfileSection = document.getElementById("profileSection");
             const profilePicture = document.createElement('div');
-            profilePicture.classList.add('profile-picture');
-            profilePicture.innerHTML = `<img src="${data.profilePicture}" alt="Profile Picture">`;
-            userProfileSection.appendChild(profilePicture);
             const profileDetails = document.createElement('div');
             profileDetails.classList.add('profile-details');
             profileDetails.innerHTML = `
-                <h2>User Profile</h2>
                 <p><strong>Name:</strong> ${data.name}</p>
                 <p><strong>Username:</strong> ${data.username}</p>
                 <p><strong>Email:</strong> ${data.email}</p>
@@ -100,7 +97,7 @@ permalink: /account
                     switch (response.status) {
                         case 401:
                             alert("Please log into your account");
-                            window.location.href = "https://the-gpt-warriors.github.io/ASLFrontend/login";
+                            window.location.href = "{{site.baseurl}}/login";
                             break;
                         case 403:
                             alert("Access forbidden. You do not have permission to access this resource.");
@@ -118,25 +115,27 @@ permalink: /account
         .then(data => {
             const userDataContainer = document.getElementById("userDataContainer");
             userDataContainer.innerHTML = ``
-            const row = document.createElement('tr');
+            data.forEach(user => {
+            const row = document.createElement('tr'); 
             row.innerHTML = `
-                <td>${data.id}</td>
-                <td>${data.name}</td>
-                <td>${data.username}</td>
-                <td>${data.email}</td>
-                <td>${formatDOB(data.dob)}</td>
+                <td>${user.id}</td>
+                <td>${user.name}</td>
+                <td>${user.username}</td>
+                <td>${user.email}</td>
+                <td>${formatDOB(user.dob)}</td>
             `;
             userDataContainer.appendChild(row);
-            })
+            });
+        })
             .catch(error => console.log('error', error));
         }
         fetchUserData();
         fetchAllUserData();
-        function formatDOB(isoDateString) {
-            const date = new Date(isoDateString);
-            const month = (date.getMonth() + 1).toString().padStart(2, '0');
-            const day = date.getDate().toString().padStart(2, '0');
+        function formatDOB(dateString) {
+            const date = new Date(dateString);
             const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const day = String(date.getDate()).padStart(2, '0');
             return `${month}-${day}-${year}`;
         }
   </script>
