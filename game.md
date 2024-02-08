@@ -5,13 +5,17 @@ permalink: /game
 ---
 
 <body>
-  <div class="container">
+    <div class="container">
     <div class="header">
       <img src="https://github.com/The-GPT-Warriors/ai-front/assets/109186517/8f289636-ccc8-402f-9bf0-1f466ef96436" alt="Logo" class="logo">
       <h1 class="title">ASL Recognition Game</h1>
+      <div id="timer" style="position: absolute; top: 20px; right: 20px; font-size: 20px; color: black; display: none;">60</div>
     </div>
     <div class="main">
-      <div class="camera"></div>
+      <div class="camera" id="camera">
+        <!-- Start Game button will be initially visible -->
+        <button id="startButton" style="font-size: 20px; padding: 10px 20px;">Start Game</button>
+      </div>
       <div id="prediction">Predictions from the model will go here</div>
     </div>
     <div class="scoreboard">
@@ -22,9 +26,13 @@ permalink: /game
       <p class="footer-text">Powered by The GPT Warriors</p>
     </div>
   </div>
+
 <script>
   let score = 0;
   let streak = 0;
+  let gameTimerId;
+  let isGameStarted = false;
+
   const aslSymbols = [
     'images/A.png',
     'images/B.png',
@@ -35,7 +43,6 @@ permalink: /game
     'images/G.png',
     'images/H.png',
     'images/I.png',
-    'images/J.png',
     'images/K.png',
     'images/L.png',
     'images/M.png',
@@ -50,70 +57,152 @@ permalink: /game
     'images/V.png',
     'images/W.png',
     'images/X.png',
-    'images/Y.png',
-    'images/Z.png'
+    'images/Y.png'
   ];
-  
-  function startGame() {
-      initializeWebcam(() => {
-          setTimeout(displayRandomASLSymbol, 1000); // Start by showing webcam, then display symbol after 2 seconds
-      });
+
+  const startButton = document.getElementById('startButton');
+  startButton.addEventListener('click', startGameFlow);
+
+  function startGameFlow() {
+    startButton.style.display = 'none'; // Hide the start button
+    startInitialCountdown();
   }
-  
-  function initializeWebcam(callback) {
-      const video = document.createElement('video');
-      const constraints = { video: true };
-      navigator.mediaDevices.getUserMedia(constraints)
-        .then((stream) => {
-          video.srcObject = stream;
-          video.onloadedmetadata = () => {
-            video.play();
-          };
+
+
+  function startInitialCountdown() {
+    let countdown = 3;
+    updateCameraDisplay(`<span style="color: white; font-size: 48px;">${countdown}</span>`);
+    let countdownTimerId = setInterval(() => {
+      countdown--;
+      if (countdown > 0) {
+        updateCameraDisplay(`<span style="color: white; font-size: 48px;">${countdown}</span>`);
+      } else {
+        clearInterval(countdownTimerId);
+        if (!isGameStarted) {
+          isGameStarted = true;
+          startGameTimer();
+          displayRandomASLSymbol();
+        }
+      }
+    }, 1000);
+  }
+
+  function displayRandomASLSymbol() {
+    const randomIndex = Math.floor(Math.random() * aslSymbols.length);
+    const symbolPath = aslSymbols[randomIndex];
+    document.querySelector('.camera').innerHTML = `<img src="${symbolPath}" alt="ASL Symbol" style="width: 640px; height: 480px;">`;
+    setTimeout(initializeWebcam, 500); // Wait 2 seconds before initializing the webcam
+  }
+
+  function initializeWebcam() {
+    const video = document.createElement('video');
+    video.style.width = '640px';
+    video.style.height = '480px';
+    const constraints = { video: true };
+    navigator.mediaDevices.getUserMedia(constraints)
+      .then((stream) => {
+        video.srcObject = stream;
+        video.onloadedmetadata = () => {
+          video.play();
           document.querySelector('.camera').innerHTML = '';
           document.querySelector('.camera').appendChild(video);
-          callback(); // Call the callback function to continue the game flow
-        })
-        .catch((err) => {
-          console.error(err);
-        });
+          setTimeout(captureGestureAndCheckResult, 1500); // 2 seconds to capture user's gesture
+        };
+      })
+      .catch((err) => {
+        console.error('Error initializing webcam:', err);
+      });
   }
-  
-  function displayRandomASLSymbol() {
-      const randomIndex = Math.floor(Math.random() * aslSymbols.length);
-      const symbolPath = aslSymbols[randomIndex];
-      // Replace webcam with image
-      document.querySelector('.camera').innerHTML = `<img src="${symbolPath}" alt="ASL Symbol" style="width: 100%;">`;
-      setTimeout(() => {
-          initializeWebcam(captureImageForRecognition); // Switch back to webcam and prepare for gesture capture
-      }, 2000); // Display symbol for 5 seconds
+
+  function captureGestureAndCheckResult() {
+    // Placeholder for gesture capture logic
+    console.log("Capture user's gesture and check result");
+    const isCorrect = Math.random() > 0.5; // Simulated result
+    checkRecognitionResult({ isCorrect });
   }
-  
-  function captureImageForRecognition() {
-      console.log("Ready to capture user's gesture");
-      // Logic to capture the gesture goes here
-      // For now, simulate recognition result after a delay
-      setTimeout(() => {
-          checkRecognitionResult({ isCorrect: Math.random() > 0.5 }); // Randomly decide if the gesture was correct
-      }, 5000); // Give user time to replicate symbol
-  }
-  
+
   function checkRecognitionResult(result) {
-      if (result.isCorrect) {
-          score += 10;
-          streak += 1;
-      } else {
-          streak = 0; // Reset streak if wrong
-      }
-      updateScoreboard();
-      setTimeout(startGame, 1000); // Wait a bit before starting the next round
+    if (result.isCorrect) {
+      score += 10;
+      streak += 1;
+    } else {
+      streak = 0;
+    }
+    updateScoreboard();
+    if (isGameStarted) {
+      setTimeout(displayRandomASLSymbol, 1000); // Loop to display another symbol
+    }
   }
-  
+
   function updateScoreboard() {
-      document.getElementById('score').textContent = score;
-      document.getElementById('streak').textContent = streak;
+    document.getElementById('score').textContent = score;
+    document.getElementById('streak').textContent = streak;
   }
-  
-  startGame();
+
+  function startGameTimer() {
+    let timeLeft = 60;
+    document.getElementById('timer').style.display = 'block';
+    document.getElementById('timer').textContent = timeLeft;
+    gameTimerId = setInterval(() => {
+      timeLeft--;
+      document.getElementById('timer').textContent = timeLeft;
+      if (timeLeft <= 0) {
+        clearInterval(gameTimerId);
+        endGame();
+      }
+    }, 1000);
+  }
+
+  function startGame() {
+    if (!isGameStarted) {
+      isGameStarted = true;
+      startInitialCountdown();
+      // startGameTimer(); // Consider when to start the game timer
+    }
+  }
+
+  function endGame() {
+    isGameStarted = false; // Prevent new symbols from being displayed
+    updateCameraDisplay(`<button id="restartButton" style="font-size: 20px; padding: 10px 20px;">Restart Game</button>`);
+    const restartButton = document.getElementById('restartButton');
+    restartButton.addEventListener('click', () => {
+      score = 0; // Reset score
+      streak = 0; // Reset streak
+      updateScoreboard(); // Update scoreboard to show reset values
+      startGameFlow(); // Restart the game flow
+    });
+    alert("Time's up! Your score is " + score + " with a streak of " + streak + ".");
+  }
+
+  function updateCameraDisplay(content) {
+    const cameraDiv = document.querySelector('.camera');
+    cameraDiv.innerHTML = content;
+  }
+
+  function updateScoreAndStreak(score, streak) {
+  let userName = sessionStorage.getItem('userName');
+  console.log(`Updating score for ${userName} with score: ${score}, streak: ${streak}`); // Diagnostic log
+  fetch(`http://localhost:8085/api/leaderboard/update/${userName}/${score}/${streak}`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${sessionStorage.getItem('token')}`
+    },
+    body: JSON.stringify({ score, streak })
+  })
+  .then(response => {
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    return response.json();
+  })
+  .then(data => {
+    console.log('Score updated', data);
+    // Call to refresh the leaderboard here
+  })
+  .catch(error => console.error('Error updating score:', error));
+}
+
 </script>
   <style>
   body, .container {
@@ -123,27 +212,46 @@ permalink: /game
     justify-content: center;
   }
 
+   #startButton {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    cursor: pointer;
+  }
+
+
   .camera {
     width: 640px;
     height: 480px;
     background: #000;
     margin: 20px;
-    display: flex; /* Ensure the camera div can properly align its children */
-    justify-content: center; /* Center-align children horizontally */
-    align-items: center; /* Center-align children vertically */
-    overflow: hidden; /* Hide parts of the image that exceed the div dimensions */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
   }
 
   .camera img {
-    width: 100%;  /* Match the width of the camera div */
-    height: 100%; /* Match the height of the camera div */
-    object-fit: contain; /* Ensure the image maintains its aspect ratio */
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
   }
 
   .scoreboard {
     margin: 20px;
   }
 
-  /* Add more styles as needed */
+  #timer {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    font-size: 20px;
+    background-color: #fff;
+    padding: 5px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  }
+  /* Additional styles as needed */
 </style>
 </body>
