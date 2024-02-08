@@ -19,14 +19,14 @@ body {
   }
   
   ul.navbar a {
-    color: #7fbbfc;
+    color: #6ab0fc;
     text-decoration: none;
     font-weight: bold;
     margin: 0 20px;
   }
   
   ul.navbar a:hover {
-    color: #037dff;
+    color: #0329ff;
   }
   
   * {
@@ -180,7 +180,19 @@ body {
   .title {
     font-size: 36px;
     font-weight: bold;
-    color: #96c9ff;
+    color: #6ab0fc;
+  }
+
+  .description1 {
+    font-size: 20px;
+    font-weight: bold;
+    color: #51b9f1;
+  }
+
+  .description2 {
+    font-size: 15px;
+    font-weight: bold;
+    color: #000;
   }
 
   .main {

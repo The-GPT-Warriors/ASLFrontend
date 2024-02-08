@@ -1,32 +1,19 @@
+
+<html>
 <body>
-  <div class="container">
-    <div class="header">
-      <img src="https://github.com/The-GPT-Warriors/ai-front/assets/109186517/8f289636-ccc8-402f-9bf0-1f466ef96436" alt="Logo" class="logo">
-      <h1 class="title">ASL Recognition</h1>
-    </div>
     <div class="main">
-      <div class="camera"></div>
-      <input class="text">Predictions from the model will go here</input>
+        <div class="container">
+            <div class="header">
+                <img src="https://github.com/The-GPT-Warriors/ASLFrontend/assets/107821010/a767e359-1bb9-4fda-86f6-3e870d85938e" alt="logo" class="logo">
+                <h1 class="title">Welcome to The GPT Warriors Organization!!</h1>
+            </div>
+            <div class="main">
+                <h3 class="description1">Team Members - Tay Kim, Anthony Bazhenov, Ethan Tran, Emaad Mir</h3>
+                <br>
+                <br>
+                <p class="description2">To get started, please log in or make an account.</p>
+        </div>
     </div>
-    <div class="footer">
-      <p class="footer-text">Powered by The GPT Warriors</p>
-    </div>
-  </div>
-  <script>
-    const video = document.createElement('video');
-    const constraints = {
-      video: true
-    };
-    navigator.mediaDevices.getUserMedia(constraints)
-      .then((stream) => {
-        video.srcObject = stream;
-        video.onloadedmetadata = () => {
-          video.play();
-        };
-        document.querySelector('.camera').appendChild(video);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  </script>
 </body>
+</html>
+

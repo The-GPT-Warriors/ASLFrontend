@@ -172,27 +172,28 @@ permalink: /game
   }
 
   function updateLeaderboard(score, streak) {
-  const userName = sessionStorage.getItem('userName'); // Assuming username is stored in session storage
-  const token = sessionStorage.getItem('token'); // Assuming JWT token is stored in session storage
+    const userName = sessionStorage.getItem('userName'); // Assuming username is stored in session storage
+    const token = sessionStorage.getItem('token'); // Assuming JWT token is stored in session storage
 
-  fetch(`http://localhost:8085/api/leaderboard/update/${userName}/${score}/${streak}`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`
-    }
-  })
-  .then(response => {
-    if (!response.ok) {
-      throw new Error('Failed to update leaderboard');
-    }
-    return response.json();
-  })
-  .then(data => {
-    console.log('Leaderboard updated:', data);
-  })
-  .catch(error => console.error('Error updating leaderboard:', error));
-}
+    fetch(`http://localhost:8085/api/leaderboard/update/${userName}/${score}/${streak}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      }
+    })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Failed to update leaderboard');
+      }
+      return response.json();
+    })
+    .then(data => {
+      console.log('Leaderboard updated:', data);
+    })
+    .catch(error => console.error('Error updating leaderboard:', error));
+  }
+  
 </script>
 
 <style>
