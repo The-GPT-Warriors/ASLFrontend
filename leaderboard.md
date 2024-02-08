@@ -23,6 +23,7 @@ permalink: /leaderboard
 </div>
 
 <script>
+<<<<<<< HEAD
   // Example static data for demonstration
   const exampleLeaderboardData = [
     { playerName: "Emu", score: 110, highestStreak: 4 },
@@ -46,6 +47,26 @@ permalink: /leaderboard
       nameCell.innerHTML = player.playerName;
       scoreCell.innerHTML = player.score;
       streakCell.innerHTML = player.highestStreak;
+=======
+  fetch('http://localhost:8085/api/leaderboard/')
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      return response.json();
+    })
+    .then(data => {
+      const leaderboardList = document.getElementById('leaderboardList');
+      data.forEach(player => {
+        const listItem = document.createElement('li');
+        listItem.textContent = `${player.playerName}: Score - ${player.score}, Highest Streak - ${player.highestStreak}`;
+        leaderboardList.appendChild(listItem);
+      });
+    })
+    .catch(error => {
+      console.error('Error fetching leaderboard:', error);
+      document.getElementById('error').style.display = 'block';
+>>>>>>> b7e80ea0a9a2aa771e4ece5212f803c81d0a86b6
     });
   })();
 </script>
