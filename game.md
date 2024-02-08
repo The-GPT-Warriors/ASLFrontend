@@ -244,4 +244,3 @@ permalink: /game
   }
 </style>
 </body>
-
