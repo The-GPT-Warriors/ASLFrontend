@@ -12,7 +12,7 @@ permalink: /leaderboard
         <th>Rank</th>
         <th>Player Name</th>
         <th>Score</th>
-        <th>Highest Streak</th>
+        <th>Most Recent Streak</th>
       </tr>
     </thead>
     <tbody>

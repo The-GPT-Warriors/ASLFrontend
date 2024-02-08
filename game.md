@@ -172,29 +172,28 @@ permalink: /game
   }
 
   function updateLeaderboard(score, streak) {
-    const userName = sessionStorage.getItem('userName'); // Assuming the username is stored in session storage
-    const token = sessionStorage.getItem('token'); // Assuming the token is stored in session storage
+    const userName = sessionStorage.getItem('userName'); // Assuming username is stored in session storage
+    const token = sessionStorage.getItem('token'); // Assuming JWT token is stored in session storage
 
     fetch(`http://localhost:8085/api/leaderboard/update/${userName}/${score}/${streak}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${token}`
-      },
-      body: JSON.stringify({score: score, streak: streak})
+      }
     })
     .then(response => {
       if (!response.ok) {
-        throw new Error(`Failed to update leaderboard: ${response.statusText}`);
+        throw new Error('Failed to update leaderboard');
       }
       return response.json();
     })
     .then(data => {
       console.log('Leaderboard updated:', data);
-      // Optionally refresh the leaderboard page or notify the user
     })
     .catch(error => console.error('Error updating leaderboard:', error));
   }
+  
 </script>
 
 <style>
