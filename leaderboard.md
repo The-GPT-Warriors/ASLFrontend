@@ -16,26 +16,26 @@ permalink: /leaderboard
       </tr>
     </thead>
     <tbody>
-      <!-- Leaderboard entries will be inserted here by JavaScript -->
+      <!-- Static Leaderboard entries will be replaced by dynamic entries -->
     </tbody>
   </table>
   <p id="error" style="display: none; color: red;">Could not load the leaderboard. Please try again later.</p>
 </div>
 
 <script>
-  // Example static data for demonstration
+  // Initially display static data
   const exampleLeaderboardData = [
     { playerName: "Emu", score: 110, highestStreak: 4 },
     { playerName: "Tay Kim", score: 90, highestStreak: 9 },
     { playerName: "Ethan Tran", score: 80, highestStreak: 8 },
     { playerName: "Anthony Bazhenov", score: 70, highestStreak: 7 },
-    { playerName: "Test", score: 0, highestStreak: 0 }
+    { playerName: "Test", score: 50, highestStreak: 5 }
   ];
 
-  // Immediately invoke this function to render the example data
-  (function renderExampleLeaderboard() {
+  function displayLeaderboard(data) {
     const leaderboardTable = document.getElementById('leaderboardTable').getElementsByTagName('tbody')[0];
-    exampleLeaderboardData.forEach((player, index) => {
+    leaderboardTable.innerHTML = ''; // Clear existing entries
+    data.forEach((player, index) => {
       let row = leaderboardTable.insertRow();
       let rankCell = row.insertCell(0);
       let nameCell = row.insertCell(1);
@@ -47,7 +47,21 @@ permalink: /leaderboard
       scoreCell.innerHTML = player.score;
       streakCell.innerHTML = player.highestStreak;
     });
-  })();
+  }
+
+  // Display static data immediately
+  displayLeaderboard(exampleLeaderboardData);
+
+  // Fetch dynamic data and display it
+  fetch('http://localhost:8085/api/leaderboard/')
+    .then(response => response.json())
+    .then(data => {
+      displayLeaderboard(data); // Replace static data with dynamic data
+    })
+    .catch(error => {
+      console.error('Error fetching leaderboard:', error);
+      document.getElementById('error').style.display = 'block';
+    });
 </script>
 
 <style>

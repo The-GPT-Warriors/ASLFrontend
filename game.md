@@ -163,11 +163,37 @@ permalink: /game
       startGameFlow();
     });
     alert("Time's up! Your score is " + score + " with a streak of " + streak + ".");
+    updateLeaderboard(score, streak); // Call to update the leaderboard after the game ends
   }
 
   function updateCameraDisplay(content) {
     const cameraDiv = document.querySelector('.camera');
     cameraDiv.innerHTML = content;
+  }
+
+  function updateLeaderboard(score, streak) {
+    const userName = sessionStorage.getItem('userName'); // Assuming the username is stored in session storage
+    const token = sessionStorage.getItem('token'); // Assuming the token is stored in session storage
+
+    fetch(`http://localhost:8085/api/leaderboard/update/${userName}/${score}/${streak}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+      body: JSON.stringify({score: score, streak: streak})
+    })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error(`Failed to update leaderboard: ${response.statusText}`);
+      }
+      return response.json();
+    })
+    .then(data => {
+      console.log('Leaderboard updated:', data);
+      // Optionally refresh the leaderboard page or notify the user
+    })
+    .catch(error => console.error('Error updating leaderboard:', error));
   }
 </script>
 
