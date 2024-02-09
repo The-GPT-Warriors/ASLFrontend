@@ -14,6 +14,8 @@ permalink: /game
     <div class="main">
       <div class="camera" id="camera">
         <button id="startButton" style="font-size: 20px; padding: 10px 20px;">Start Game</button>
+        <p id="instructions" style="color: white; text-align: center; margin-top: 20px;">Press 'Start Game' to begin. Match the ASL symbols shown on screen with your hand gestures. Points are scored for accuracy. Good luck!</p>
+
       </div>
       <div id="prediction">Predictions from the model will go here</div>
     </div>
@@ -172,28 +174,27 @@ permalink: /game
   }
 
   function updateLeaderboard(score, streak) {
-    const userName = sessionStorage.getItem('userName'); // Assuming username is stored in session storage
-    const token = sessionStorage.getItem('token'); // Assuming JWT token is stored in session storage
+  const userName = sessionStorage.getItem('userName'); // Assuming username is stored in session storage
+  const token = sessionStorage.getItem('token'); // Assuming JWT token is stored in session storage
 
-    fetch(`http://localhost:8085/api/leaderboard/update/${userName}/${score}/${streak}`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
-      }
-    })
-    .then(response => {
-      if (!response.ok) {
-        throw new Error('Failed to update leaderboard');
-      }
-      return response.json();
-    })
-    .then(data => {
-      console.log('Leaderboard updated:', data);
-    })
-    .catch(error => console.error('Error updating leaderboard:', error));
-  }
-  
+  fetch(`http://localhost:8085/api/leaderboard/update/${userName}/${score}/${streak}`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    }
+  })
+  .then(response => {
+    if (!response.ok) {
+      throw new Error('Failed to update leaderboard');
+    }
+    return response.json();
+  })
+  .then(data => {
+    console.log('Leaderboard updated:', data);
+  })
+  .catch(error => console.error('Error updating leaderboard:', error));
+}
 </script>
 
 <style>
