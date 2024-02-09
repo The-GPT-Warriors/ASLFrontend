@@ -2,10 +2,8 @@
 <link rel="stylesheet" href="style.css">
   <div id="header">
     <nav>
-      <ul class="navbar">
+      <ul class="navbar" id="navbar">
         <li class="nav-item"><a href="{{site.baseurl}}/">Home</a></li>
-        <li class="nav-item"><a href="{{site.baseurl}}/game">Game</a></li>
-        <li class="nav-item"><a href="{{site.baseurl}}/leaderboard">Leaderboard</a></li>
         <li class="nav-item"><a href="{{site.baseurl}}/reference">ASL Reference Page (A-Z)</a></li>
         <li class="nav-item"><a href="{{site.baseurl}}/login">Login</a></li>
       </ul>
@@ -43,16 +41,18 @@
             <li class="nav-item"><a href="{{site.baseurl}}/main">Home</a></li>
             <li class="nav-item"><a href="{{site.baseurl}}/game">Game</a></li>
             <li class="nav-item"><a href="{{site.baseurl}}/leaderboard">Leaderboard</a></li>
+            <li class="nav-item"><a href="{{site.baseurl}}/reference">ASL Reference Page (A-Z)</a></li>
             <li class="nav-item"><a href="{{site.baseurl}}/account">Account</a></li>;
       `;
     } else {
         navbar.innerHTML = `
           <li class="nav-item" id="login"><a href="{{site.baseurl}}/login">Login</a></li>
-          <li class="nav-item" id="home"><a href="{{site.baseurl}}/">Home</a></li>`
-        }
+          <li class="nav-item" id="home"><a href="{{site.baseurl}}/">Home</a></li>
+          <li class="nav-item"><a href="{{site.baseurl}}/reference">ASL Reference Page (A-Z)</a></li>
+        `}
       })
       .catch((error) => {
-        console.error("Error checking login status:", error);
+        console.log("Error checking login status:", error);
       });
   }
 
