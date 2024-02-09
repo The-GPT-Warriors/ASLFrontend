@@ -9,7 +9,7 @@ permalink: /game
     <div class="header">
       <img src="https://github.com/The-GPT-Warriors/ai-front/assets/109186517/8f289636-ccc8-402f-9bf0-1f466ef96436" alt="Logo" class="logo">
       <h1 class="title">ASL Recognition Game</h1>
-      <div id="timer" style="position: absolute; top: 20px; right: 20px; font-size: 20px; color: black; display: none;">60</div>
+      <div id="timer" style="position: absolute; top: 20px; right: 20px; font-size: 20px; color: black; display: none;">15</div>
     </div>
     <div class="main">
       <div class="camera" id="camera">
@@ -34,7 +34,7 @@ permalink: /game
   let gameTimerId;
   let isGameStarted = false;
 
-  const aslSymbols = [
+  const aslSymbols = [ // list of ASL symbols
     'images/A.png',
     'images/B.png',
     'images/C.png',
@@ -67,11 +67,11 @@ permalink: /game
   startButton.addEventListener('click', startGameFlow);
 
   function startGameFlow() {
-    startButton.style.display = 'none';
+    startButton.style.display = 'none'; // pressing the start button activates the game
     startInitialCountdown();
   }
 
-  function startInitialCountdown() {
+  function startInitialCountdown() { // 3 2 1 countdown before game starts
     let countdown = 3;
     updateCameraDisplay(`<span style="color: white; font-size: 48px;">${countdown}</span>`);
     let countdownTimerId = setInterval(() => {
@@ -88,8 +88,8 @@ permalink: /game
       }
     }, 1000);
   }
-
-  function displayRandomASLSymbol() {
+ 
+  function displayRandomASLSymbol() { // chooses a random image from ASL Symbol list to display
     const randomIndex = Math.floor(Math.random() * aslSymbols.length);
     const symbolPath = aslSymbols[randomIndex];
     document.querySelector('.camera').innerHTML = `<img src="${symbolPath}" alt="ASL Symbol" style="width: 640px; height: 480px;">`;
@@ -97,7 +97,7 @@ permalink: /game
   }
 
   function initializeWebcam() {
-    const video = document.createElement('video');
+    const video = document.createElement('video'); // initializes webcam
     video.style.width = '640px';
     video.style.height = '480px';
     const constraints = { video: true };
@@ -122,7 +122,7 @@ permalink: /game
     checkRecognitionResult({ isCorrect });
   }
 
-  function checkRecognitionResult(result) {
+  function checkRecognitionResult(result) { // checks to see if gesture is correct
     if (result.isCorrect) {
       score += 10;
       streak += 1;
@@ -141,7 +141,7 @@ permalink: /game
   }
 
   function startGameTimer() {
-    let timeLeft = 60;
+    let timeLeft = 15;
     document.getElementById('timer').style.display = 'block';
     document.getElementById('timer').textContent = timeLeft;
     gameTimerId = setInterval(() => {
@@ -165,7 +165,7 @@ permalink: /game
       startGameFlow();
     });
     alert("Time's up! Your score is " + score + " with a streak of " + streak + ".");
-    updateLeaderboard(score, streak); // Call to update the leaderboard after the game ends
+    updateLeaderboard(score, streak); 
   }
 
   function updateCameraDisplay(content) {
@@ -174,10 +174,10 @@ permalink: /game
   }
 
   function updateLeaderboard(score, streak) {
-  const userName = sessionStorage.getItem('userName'); // Assuming username is stored in session storage
-  const token = sessionStorage.getItem('token'); // Assuming JWT token is stored in session storage
+  const userName = sessionStorage.getItem('userName');
+  const token = sessionStorage.getItem('token'); 
 
-  fetch(`http://localhost:8085/api/leaderboard/update/${userName}/${score}/${streak}`, {
+  fetch(`http://localhost:8085/api/leaderboard/update/${userName}/${score}/${streak}`, { // fetch leaderboard, POST
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
