@@ -9,11 +9,12 @@ permalink: /game
     <div class="header">
       <img src="https://github.com/The-GPT-Warriors/ai-front/assets/109186517/8f289636-ccc8-402f-9bf0-1f466ef96436" alt="Logo" class="logo">
       <h1 class="title">ASL Recognition Game</h1>
-      <div id="timer" style="position: absolute; top: 20px; right: 20px; font-size: 20px; color: black; display: none;">60</div>
+      <div id="timer" style="position: absolute; top: 20px; right: 20px; font-size: 20px; color: black; display: none;">15</div>
     </div>
     <div class="main">
       <div class="camera" id="camera">
         <button id="startButton" style="font-size: 20px; padding: 10px 20px;">Start Game</button>
+        <p id="instructions" style="color: white; text-align: center; margin-top: 20px;">Press 'Start Game' to begin. Match the ASL symbols shown on screen with your hand gestures. Points are scored for accuracy. Good luck!</p>
       </div>
       <div id="prediction">Predictions from the model will go here</div>
     </div>
@@ -28,11 +29,11 @@ permalink: /game
 
 <script>
   let score = 0;
-  let streak = 0;
+  let recentStreak = 0;
   let gameTimerId;
   let isGameStarted = false;
 
-  const aslSymbols = [
+  const aslSymbols = [ // list of ASL symbols
     'images/A.png',
     'images/B.png',
     'images/C.png',
@@ -61,15 +62,23 @@ permalink: /game
     'images/Z.png'
   ];
 
-  const startButton = document.getElementById('startButton');
-  startButton.addEventListener('click', startGameFlow);
+    const startButton = document.getElementById('startButton');
+    startButton.addEventListener('click', startGameFlow);
 
-  function startGameFlow() {
-    startButton.style.display = 'none';
-    startInitialCountdown();
-  }
+    function startGameFlow() {
+        resetGame();
+        startButton.style.display = 'none';
+        startInitialCountdown();
+      }
 
-  function startInitialCountdown() {
+    function resetGame() {
+        score = 0;
+        streak = 0;
+        updateScoreboard();
+        if (document.getElementById('restartButton')) document.getElementById('restartButton').remove();
+    }
+
+  function startInitialCountdown() { // 3 2 1 countdown before game starts
     let countdown = 3;
     updateCameraDisplay(`<span style="color: white; font-size: 48px;">${countdown}</span>`);
     let countdownTimerId = setInterval(() => {
@@ -86,8 +95,8 @@ permalink: /game
       }
     }, 1000);
   }
-
-  function displayRandomASLSymbol() {
+ 
+  function displayRandomASLSymbol() { // chooses a random image from ASL Symbol list to display
     const randomIndex = Math.floor(Math.random() * aslSymbols.length);
     const symbolPath = aslSymbols[randomIndex];
     document.querySelector('.camera').innerHTML = `<img src="${symbolPath}" alt="ASL Symbol" style="width: 640px; height: 480px;">`;
@@ -95,7 +104,7 @@ permalink: /game
   }
 
   function initializeWebcam() {
-    const video = document.createElement('video');
+    const video = document.createElement('video'); // initializes webcam
     video.style.width = '640px';
     video.style.height = '480px';
     const constraints = { video: true };
@@ -123,23 +132,25 @@ permalink: /game
   function checkRecognitionResult(result) {
     if (result.isCorrect) {
       score += 10;
-      streak += 1;
-    } else {
-      streak = 0;
-    }
+      recentStreak += 1; // Increment recentStreak instead of highestStreak
+  } else {
+      recentStreak = 0; // Reset recentStreak if the answer is incorrect
+  }
+
     updateScoreboard();
     if (isGameStarted) {
       setTimeout(displayRandomASLSymbol, 1000);
     }
   }
 
-  function updateScoreboard() {
-    document.getElementById('score').textContent = score;
-    document.getElementById('streak').textContent = streak;
-  }
+    function updateScoreboard() {
+      document.getElementById('score').textContent = score;
+      document.getElementById('streak').textContent = recentStreak; // Use recentStreak here
+}
+
 
   function startGameTimer() {
-    let timeLeft = 60;
+    let timeLeft = 15;
     document.getElementById('timer').style.display = 'block';
     document.getElementById('timer').textContent = timeLeft;
     gameTimerId = setInterval(() => {
@@ -148,23 +159,18 @@ permalink: /game
       if (timeLeft <= 0) {
         clearInterval(gameTimerId);
         endGame();
-      }
-    }, 1000);
-  }
+    }
+  }, 1000);
+}
 
   function endGame() {
     isGameStarted = false;
-    updateCameraDisplay(`<button id="restartButton" style="font-size: 20px; padding: 10px 20px;">Restart Game</button>`);
-    const restartButton = document.getElementById('restartButton');
-    restartButton.addEventListener('click', () => {
-      score = 0;
-      streak = 0;
-      updateScoreboard();
-      startGameFlow();
-    });
-    alert("Time's up! Your score is " + score + " with a streak of " + streak + ".");
-    updateLeaderboard(score, streak); // Call to update the leaderboard after the game ends
+    alert(`Time's up! Your score is ${score} with a most recent streak of ${recentStreak}.`);
+    updateLeaderboard(score, recentStreak); 
+    document.querySelector('.camera').innerHTML = '<button id="restartButton" style="font-size: 20px; padding: 10px 20px;">Restart Game</button>';
+    document.getElementById('restartButton').addEventListener('click', startGameFlow);
   }
+
 
   function updateCameraDisplay(content) {
     const cameraDiv = document.querySelector('.camera');
@@ -172,28 +178,30 @@ permalink: /game
   }
 
   function updateLeaderboard(score, streak) {
-    const userName = sessionStorage.getItem('userName'); // Assuming username is stored in session storage
-    const token = sessionStorage.getItem('token'); // Assuming JWT token is stored in session storage
+  // Fetch username from session storage
+    const userName = sessionStorage.getItem('userName');
+    const token = sessionStorage.getItem('token');
 
-    fetch(`http://localhost:8085/api/leaderboard/update/${userName}/${score}/${streak}`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
-      }
-    })
-    .then(response => {
-      if (!response.ok) {
-        throw new Error('Failed to update leaderboard');
-      }
-      return response.json();
-    })
-    .then(data => {
-      console.log('Leaderboard updated:', data);
-    })
-    .catch(error => console.error('Error updating leaderboard:', error));
-  }
-  
+  fetch(`http://localhost:8085/api/leaderboard/update/${encodeURIComponent(userName)}/${score}/${streak}`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    },
+    body: JSON.stringify({ score: score, streak: streak })
+  })
+  .then(response => {
+    if (!response.ok) {
+      throw new Error('Failed to update leaderboard');
+    }
+    return response.json();
+  })
+  .then(data => {
+    console.log('Leaderboard updated:', data);
+    // Trigger a refresh of the leaderboard display here if needed
+  })
+  .catch(error => console.error('Error updating leaderboard:', error));
+}
 </script>
 
 <style>
