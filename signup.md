@@ -30,7 +30,8 @@ permalink: /signup
             let email = document.getElementById("email").value;
             let password = document.getElementById("password").value;
             let name = document.getElementById("name").value;
-            let dob = document.getElementById("dob").value;
+            let dobInput = document.getElementById("dob").value;
+            let dob = formateDate(dobInput);
             let username = document.getElementById("username").value;
             let requestURL = `http://localhost:8085/api/person/post?email=${email}&password=${password}&name=${name}&dob=${dob}&username=${username}`;
             console.log(requestURL);
@@ -48,6 +49,13 @@ permalink: /signup
             .catch(error => {
                 alert('An unexpected error occurred: ' + error);
             });
+        }
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const day = String(date.getDate()).padStart(2, '0');
+            const year = date.getFullYear();
+            return `${month}-${day}-${year}`;
         }
     </script>
 </body>
