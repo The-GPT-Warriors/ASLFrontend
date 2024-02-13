@@ -15,7 +15,6 @@ permalink: /game
       <div class="camera" id="camera">
         <button id="startButton" style="font-size: 20px; padding: 10px 20px;">Start Game</button>
         <p id="instructions" style="color: white; text-align: center; margin-top: 20px;">Press 'Start Game' to begin. Match the ASL symbols shown on screen with your hand gestures. Points are scored for accuracy. Good luck!</p>
-
       </div>
       <div id="prediction">Predictions from the model will go here</div>
     </div>
@@ -31,6 +30,7 @@ permalink: /game
 <script>
   let score = 0;
   let streak = 0;
+  let highestStreak = 0;
   let gameTimerId;
   let isGameStarted = false;
 
@@ -63,13 +63,22 @@ permalink: /game
     'images/Z.png'
   ];
 
-  const startButton = document.getElementById('startButton');
-  startButton.addEventListener('click', startGameFlow);
+    const startButton = document.getElementById('startButton');
+    startButton.addEventListener('click', startGameFlow);
 
-  function startGameFlow() {
-    startButton.style.display = 'none'; // pressing the start button activates the game
-    startInitialCountdown();
-  }
+    function startGameFlow() {
+        resetGame();
+        startButton.style.display = 'none';
+        startInitialCountdown();
+      }
+
+    function resetGame() {
+        score = 0;
+        streak = 0;
+        highestStreak = 0;
+        updateScoreboard();
+        if (document.getElementById('restartButton')) document.getElementById('restartButton').remove();
+    }
 
   function startInitialCountdown() { // 3 2 1 countdown before game starts
     let countdown = 3;
@@ -122,18 +131,19 @@ permalink: /game
     checkRecognitionResult({ isCorrect });
   }
 
-  function checkRecognitionResult(result) { // checks to see if gesture is correct
+  function checkRecognitionResult(result) {
     if (result.isCorrect) {
-      score += 10;
-      streak += 1;
+        score += 10;
+        streak += 1;
+        highestStreak = Math.max(highestStreak, streak); // Update highest streak
     } else {
-      streak = 0;
+        streak = 0;
     }
     updateScoreboard();
     if (isGameStarted) {
-      setTimeout(displayRandomASLSymbol, 1000);
+        setTimeout(displayRandomASLSymbol, 1000);
     }
-  }
+}
 
   function updateScoreboard() {
     document.getElementById('score').textContent = score;
@@ -150,23 +160,21 @@ permalink: /game
       if (timeLeft <= 0) {
         clearInterval(gameTimerId);
         endGame();
-      }
-    }, 1000);
-  }
+    }
+  }, 1000);
+}
 
   function endGame() {
     isGameStarted = false;
-    updateCameraDisplay(`<button id="restartButton" style="font-size: 20px; padding: 10px 20px;">Restart Game</button>`);
-    const restartButton = document.getElementById('restartButton');
-    restartButton.addEventListener('click', () => {
-      score = 0;
-      streak = 0;
-      updateScoreboard();
-      startGameFlow();
+    document.querySelector('.camera').innerHTML = `<button id="restartButton" style="font-size: 20px; padding: 10px 20px;">Restart Game</button>`;
+    alert(`Time's up! Your score is ${score} with a highest streak of ${highestStreak}.`);
+    updateLeaderboard(score, highestStreak);
+    document.getElementById('restartButton').addEventListener('click', () => {
+      document.querySelector('.camera').innerHTML = ''; // Clear camera content
+      startGameFlow(); // Reinitialize the game
     });
-    alert("Time's up! Your score is " + score + " with a streak of " + streak + ".");
-    updateLeaderboard(score, streak); 
   }
+
 
   function updateCameraDisplay(content) {
     const cameraDiv = document.querySelector('.camera');
@@ -174,27 +182,24 @@ permalink: /game
   }
 
   function updateLeaderboard(score, streak) {
-  const userName = sessionStorage.getItem('userName');
-  const token = sessionStorage.getItem('token'); 
+        const userName = sessionStorage.getItem('userName');
+        const token = sessionStorage.getItem('token');
 
-  fetch(`http://localhost:8085/api/leaderboard/update/${userName}/${score}/${streak}`, { // fetch leaderboard, POST
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`
-    }
-  })
-  .then(response => {
-    if (!response.ok) {
-      throw new Error('Failed to update leaderboard');
-    }
-    return response.json();
-  })
-  .then(data => {
-    console.log('Leaderboard updated:', data);
-  })
-  .catch(error => console.error('Error updating leaderboard:', error));
-}
+        fetch(`http://localhost:8085/api/leaderboard/update/${userName}/${score}/${streak}`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          },
+          body: JSON.stringify({ score: score, streak: streak })
+        })
+        .then(response => response.json())
+        .then(data => {
+          console.log('Leaderboard updated:', data);
+          // Optionally trigger a leaderboard refresh here
+        })
+        .catch(error => console.error('Error updating leaderboard:', error));
+      }
 </script>
 
 <style>
