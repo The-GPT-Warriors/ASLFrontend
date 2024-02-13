@@ -43,7 +43,7 @@ permalink: /leaderboard
       rankCell.innerHTML = index + 1;
       nameCell.innerHTML = player.playerName;
       scoreCell.innerHTML = player.score;
-      streakCell.innerHTML = player.highestStreak;
+      streakCell.innerHTML = player.recentStreak;
     });
   }
 
@@ -77,11 +77,12 @@ permalink: /leaderboard
     text-align: left;
   }
   #leaderboardTable th {
-    background-color: light blue;
-    color: white; /* Set text color to white for header */
-  }
+  background-color: #007bff; 
+  color: white;
+}
+
   #leaderboardTable td {
-    background-color: white; /* Set background color to white for data cells */
-    color: black; /* Set text color to black for data cells */
-  }
+  background-color: white; 
+  color: black; 
+}
 </style>
