@@ -22,15 +22,15 @@ permalink: /leaderboard
 </div>
 
 <script>
-/*  const exampleLeaderboardData = [
-    { playerName: "Emu", score: 110, highestStreak: 4 },
-    { playerName: "Tay Kim", score: 90, highestStreak: 9 },
-    { playerName: "Ethan Tran", score: 80, highestStreak: 8 },
-    { playerName: "Anthony Bazhenov", score: 70, highestStreak: 7 },
-    { playerName: "Test", score: 50, highestStreak: 5 }
-  ];*/
+  // Commenting out static data
+  // const exampleLeaderboardData = [
+  //   { playerName: "Tay Kim", score: 100, recentStreak: 2 },
+  //   { playerName: "Ethan Tran", score: 90, recentStreak: 0 },
+  //   { playerName: "Anthony Bazhenov", score: 70, recentStreak: 3 },
+  //   { playerName: "Test", score: 50, recentStreak: 1 }
+  // ];
 
-  function displayLeaderboard(data) { // displays leader board data upon entering page
+  function displayLeaderboard(data) {
     const leaderboardTable = document.getElementById('leaderboardTable').getElementsByTagName('tbody')[0];
     leaderboardTable.innerHTML = ''; // Clear existing entries
     data.forEach((player, index) => {
@@ -47,20 +47,19 @@ permalink: /leaderboard
     });
   }
 
-  // Display static data immediately
-  // displayLeaderboard(exampleLeaderboardData);
-
   // Fetch dynamic data and display it
-  fetch('http://localhost:8085/api/leaderboard/') // fetches info from the backend
+  fetch('http://localhost:8085/api/leaderboard/')
     .then(response => response.json())
-    .then(data => {
-      displayLeaderboard(data); // Replace static data with dynamic data
+    .then(fetchedData => {
+      // No more combination with static data
+      displayLeaderboard(fetchedData); // Display only fetched data
     })
     .catch(error => {
       console.error('Error fetching leaderboard:', error);
       document.getElementById('error').style.display = 'block';
     });
 </script>
+
 
 <style>
   #leaderboardContainer {
