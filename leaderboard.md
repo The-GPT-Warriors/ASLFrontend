@@ -16,23 +16,21 @@ permalink: /leaderboard
       </tr>
     </thead>
     <tbody>
-      <!-- Static Leaderboard entries will be replaced by dynamic entries -->
     </tbody>
   </table>
   <p id="error" style="display: none; color: red;">Could not load the leaderboard. Please try again later.</p>
 </div>
 
 <script>
-  // Initially display static data
-  const exampleLeaderboardData = [
+/*  const exampleLeaderboardData = [
     { playerName: "Emu", score: 110, highestStreak: 4 },
     { playerName: "Tay Kim", score: 90, highestStreak: 9 },
     { playerName: "Ethan Tran", score: 80, highestStreak: 8 },
     { playerName: "Anthony Bazhenov", score: 70, highestStreak: 7 },
     { playerName: "Test", score: 50, highestStreak: 5 }
-  ];
+  ];*/
 
-  function displayLeaderboard(data) {
+  function displayLeaderboard(data) { // displays leader board data upon entering page
     const leaderboardTable = document.getElementById('leaderboardTable').getElementsByTagName('tbody')[0];
     leaderboardTable.innerHTML = ''; // Clear existing entries
     data.forEach((player, index) => {
@@ -50,10 +48,10 @@ permalink: /leaderboard
   }
 
   // Display static data immediately
-  displayLeaderboard(exampleLeaderboardData);
+  // displayLeaderboard(exampleLeaderboardData);
 
   // Fetch dynamic data and display it
-  fetch('http://localhost:8085/api/leaderboard/')
+  fetch('http://localhost:8085/api/leaderboard/') // fetches info from the backend
     .then(response => response.json())
     .then(data => {
       displayLeaderboard(data); // Replace static data with dynamic data
@@ -79,6 +77,11 @@ permalink: /leaderboard
     text-align: left;
   }
   #leaderboardTable th {
-    background-color: #f2f2f2;
+    background-color: light blue;
+    color: white; /* Set text color to white for header */
+  }
+  #leaderboardTable td {
+    background-color: white; /* Set background color to white for data cells */
+    color: black; /* Set text color to black for data cells */
   }
 </style>
