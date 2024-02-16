@@ -12,18 +12,6 @@
 </header>
 
 <script>
-  function isLoggedIn(cookieName) {
-    const cookies = document.cookie.split(' ');
-    console.log(cookies);
-    for (const cookie of cookies) {
-      const [name, value] = cookie.trim().split('=');
-      if (name === cookieName) {
-        return true;
-      }
-    }
-    return false;
-  }
-
   function updateHeader() {
     const mainHeader = document.getElementById('mainHeader');
     const navbar = document.getElementById('navbar');
@@ -42,13 +30,13 @@
             <li class="nav-item"><a href="{{site.baseurl}}/game">Game</a></li>
             <li class="nav-item"><a href="{{site.baseurl}}/leaderboard">Leaderboard</a></li>
             <li class="nav-item"><a href="{{site.baseurl}}/reference">ASL Reference Page (A-Z)</a></li>
-            <li class="nav-item"><a href="{{site.baseurl}}/account">Account</a></li>;
+            <li class="nav-item"><a href="{{site.baseurl}}/account">Account <img style="width: 20px" src="https://github.com/The-GPT-Warriors/ASLFrontend/assets/107821010/52cd3a28-b6b5-44d2-a9d8-a1f7c50410c0"></a></li>
       `;
     } else {
         navbar.innerHTML = `
-          <li class="nav-item" id="login"><a href="{{site.baseurl}}/login">Login</a></li>
           <li class="nav-item" id="home"><a href="{{site.baseurl}}/">Home</a></li>
           <li class="nav-item"><a href="{{site.baseurl}}/reference">ASL Reference Page (A-Z)</a></li>
+          <li class="nav-item" id="login"><a href="{{site.baseurl}}/login">Login</a></li>
         `}
       })
       .catch((error) => {

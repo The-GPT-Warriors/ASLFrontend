@@ -16,7 +16,6 @@ permalink: /account
                 </div>
                 <div class="profile-details">
                     <button onclick="updateProfile()">Update</button>
-                    <button id="deleteProfile" onclick="deleteSelf()">Delete Profile</button>
                 </div>
             </div>
             <div></div>
@@ -29,7 +28,7 @@ permalink: /account
                         <th>Email</th>
                         <th>Age</th>
                         <th>Role</th>
-                        <th>Actions</th>
+                        <th id="action">Actions</th>
                     </tr>
                 </thead>
                 <tbody id="userDataContainer">
@@ -73,11 +72,11 @@ permalink: /account
         .then(data => {
             let deleteId = data.id;
             console.log(deleteId);
-            const deleteButton = document.getElementById("deleteProfile");
             const userProfileSection = document.getElementById("profileSection");
             const profilePicture = document.createElement('div');
             const profileDetails = document.createElement('div');
             profileDetails.classList.add('profile-details');
+            const isAdmin = data.roles.some(role => role.name === "ROLE_ADMIN");
             const roles = data.roles.map(role => capitalizeFirstLetter(role.name.replace('ROLE_', '').toLowerCase())).join(', ');
             profileDetails.innerHTML = `
                 <p><strong>Name:</strong> ${data.name}</p>
@@ -87,6 +86,8 @@ permalink: /account
                 <p><strong>Roles: </strong>${roles}</p>
             `;
             userProfileSection.appendChild(profileDetails);
+            userProfileSection.dataset.isAdmin = isAdmin;
+            fetchAllUserData();
         })
         .catch(error => console.log('error', error));
     }
@@ -136,22 +137,14 @@ permalink: /account
                     <td>${adminRole ? 'Admin' : (user.roles && user.roles.length > 0 ? capitalizeFirstLetter(user.roles[0].name.replace('ROLE_', '').toLowerCase()) : 'None')}</td>
                     <td></td
                 `;
-                const actions = row.querySelector('td:last-child');
-                actions.appendChild(createDelete(user.id, adminRole));
+                const deleteCell = row.querySelector('td:last-child');
+                deleteCell.appendChild(createDelete(user.id));
                 userDataContainer.appendChild(row);
             });
         })
             .catch(error => console.log('error', error));
         }
         fetchUserData();
-        fetchAllUserData();
-        function formatDOB(dateString) {
-            const date = new Date(dateString);
-            const year = date.getFullYear();
-            const month = String(date.getMonth() + 1).padStart(2, '0');
-            const day = String(date.getDate()).padStart(2, '0');
-            return `${month}-${day}-${year}`;
-        }
         function capitalizeFirstLetter(str) {
             return str.charAt(0).toUpperCase() + str.slice(1);
         }
@@ -193,58 +186,25 @@ permalink: /account
                 })
                 .catch(error => console.log('error', error));
         }
-        function deleteSelf(id) {
-            const requestOptions = {
-                method: 'DELETE',
-                mode: 'cors',
-                cache: 'default',
-                credentials: 'include',
+        function createDelete(userId) {
+            const userProfileSection = document.getElementById("profileSection");
+            const admin = (userProfileSection.dataset.isAdmin === 'true');
+            const actions = document.getElementById('action')
+            if (!admin) {
+                actions.style.display = 'none';
+                return null;
             }
-            fetch('http://localhost:8085/api/person/delete/self', requestOptions)
-                .then(response => {
-                    if (!response.ok) {
-                        const errorMsg = 'Delete user error: ' + response.status;
-                        console.log(errorMsg);
-                        switch (response.status) {
-                            case 401:
-                                alert("Please log into your account");
-                                window.location.href = "{{site.baseurl}}/login";
-                                break;
-                            case 403:
-                                alert("Access forbidden. You do not have permission to delete this user.");
-                                break;
-                            case 404:
-                                alert("User not found. Please check the user ID.");
-                                break;
-                            default:
-                                alert("Delete user failed. Please try again later.");
-                        }
-                        return Promise.reject('Delete user failed');
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    console.log('User deleted successfully:', data);
-                })
-                .catch(error => console.log('error', error));
-        }
-        function createDelete(userId, isAdmin) {
-            const deleteButton = document.createElement('button');
+            const deleteButton = document.createElement('BUTTON');
             deleteButton.innerText = 'Delete';
             deleteButton.onclick = function() {
-                if (isAdmin) {
-                    if (confirm('Are you sure you want to delete this user?')) {
-                        deleteUser(userId);
-                    }
-                } else {
-                    alert('You do not have permission to delete users.');
+                if (confirm('Are you sure you want to delete this user?')) {
+                    deleteUser(userId);
                 }
-            }
+            };
             return deleteButton;
         }
         function signOut() {
             var requestOptions = {
-            method: 'POST',
             mode: 'cors',
             cache: 'no-cache',
             credentials: 'include',
@@ -260,9 +220,11 @@ permalink: /account
                 console.log(errorMsg);
                 alert("Sign Out failed. Please try again.");
                 return Promise.reject('Sign Out failed');
+                } else {
+                    alert("Sign Out successful");
+                    document.cookie.split(";").forEach(function(c) { document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/"); });
+                    window.location.href = "{{site.baseurl}}/login";
                 }
-                alert("Sign Out successful");
-                window.location.href = "{{site.baseurl}}/login";
             })
             .catch(error => console.log('error', error));
         }
