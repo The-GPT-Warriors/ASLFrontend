@@ -46,7 +46,7 @@ permalink: /account
         cache: 'default',
         credentials: 'include',
       };
-    fetch("http://localhost:8085/api/person/jwt", requestOptions)
+    fetch("https://asl.stu.nighthawkcodingsociety.com/api/person/jwt", requestOptions)
         .then(response => {
             if (!response.ok) {
                 const errorMsg = 'Login error: ' + response.status;
@@ -95,10 +95,12 @@ permalink: /account
       var requestOptions = {
         method: 'GET',
         mode: 'cors',
+    
+    
         cache: 'default',
         credentials: 'include',
       };
-      fetch("http://localhost:8085/api/person/", requestOptions)
+      fetch("https://asl.stu.nighthawkcodingsociety.com/api/person/", requestOptions)
         .then(response => {
                 if (!response.ok) {
                     const errorMsg = 'Login error: ' + response.status;
@@ -158,7 +160,7 @@ permalink: /account
                 cache: 'default',
                 credentials: 'include',
             };
-            fetch('http://localhost:8085/api/person/delete/${userId}', requestOptions)
+            fetch('https://asl.stu.nighthawkcodingsociety.com/api/person/delete/${userId}', requestOptions)
                 .then(response => {
                     if (!response.ok) {
                         const errorMsg = 'Delete user error: ' + response.status;
@@ -213,7 +215,7 @@ permalink: /account
             },
             redirect: 'follow',
             };
-            fetch("http://localhost:8085/logout", requestOptions)
+            fetch("https://asl.stu.nighthawkcodingsociety.com/logout", requestOptions)
             .then(response => {
                 if (!response.ok) {
                 const errorMsg = 'Sign Out error: ' + response.status;
