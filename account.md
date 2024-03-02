@@ -28,7 +28,7 @@ permalink: /account
                         <th>Email</th>
                         <th>Age</th>
                         <th>Role</th>
-                        <th>Actions</th>
+                        <th id="action">Actions</th>
                     </tr>
                 </thead>
                 <tbody id="userDataContainer">
@@ -70,10 +70,13 @@ permalink: /account
             return response.json();
         })
         .then(data => {
+            let deleteId = data.id;
+            console.log(deleteId);
             const userProfileSection = document.getElementById("profileSection");
             const profilePicture = document.createElement('div');
             const profileDetails = document.createElement('div');
             profileDetails.classList.add('profile-details');
+            const isAdmin = data.roles.some(role => role.name === "ROLE_ADMIN");
             const roles = data.roles.map(role => capitalizeFirstLetter(role.name.replace('ROLE_', '').toLowerCase())).join(', ');
             profileDetails.innerHTML = `
                 <p><strong>Name:</strong> ${data.name}</p>
@@ -83,6 +86,8 @@ permalink: /account
                 <p><strong>Roles: </strong>${roles}</p>
             `;
             userProfileSection.appendChild(profileDetails);
+            userProfileSection.dataset.isAdmin = isAdmin;
+            fetchAllUserData();
         })
         .catch(error => console.log('error', error));
     }
@@ -90,6 +95,8 @@ permalink: /account
       var requestOptions = {
         method: 'GET',
         mode: 'cors',
+    
+    
         cache: 'default',
         credentials: 'include',
       };
@@ -129,25 +136,17 @@ permalink: /account
                     <td>${user.username}</td>
                     <td>${user.email}</td>
                     <td>${user.age}</td>
-                    <td>${adminRole ? 'Admin' : capitalizeFirstLetter(user.roles[0].name.replace('ROLE_', '').toLowerCase())}</td>
+                    <td>${adminRole ? 'Admin' : (user.roles && user.roles.length > 0 ? capitalizeFirstLetter(user.roles[0].name.replace('ROLE_', '').toLowerCase()) : 'None')}</td>
                     <td></td
                 `;
-                const actions = row.querySelector('td:last-child');
-                actions.appendChild(createDelete(user.id, adminRole));
+                const deleteCell = row.querySelector('td:last-child');
+                deleteCell.appendChild(createDelete(user.id));
                 userDataContainer.appendChild(row);
             });
         })
             .catch(error => console.log('error', error));
         }
         fetchUserData();
-        fetchAllUserData();
-        function formatDOB(dateString) {
-            const date = new Date(dateString);
-            const year = date.getFullYear();
-            const month = String(date.getMonth() + 1).padStart(2, '0');
-            const day = String(date.getDate()).padStart(2, '0');
-            return `${month}-${day}-${year}`;
-        }
         function capitalizeFirstLetter(str) {
             return str.charAt(0).toUpperCase() + str.slice(1);
         }
@@ -189,23 +188,25 @@ permalink: /account
                 })
                 .catch(error => console.log('error', error));
         }
-        function createDelete(userId, isAdmin) {
-            const deleteButton = document.createElement('button');
+        function createDelete(userId) {
+            const userProfileSection = document.getElementById("profileSection");
+            const admin = (userProfileSection.dataset.isAdmin === 'true');
+            const actions = document.getElementById('action')
+            if (!admin) {
+                actions.style.display = 'none';
+                return null;
+            }
+            const deleteButton = document.createElement('BUTTON');
             deleteButton.innerText = 'Delete';
             deleteButton.onclick = function() {
-                if (isAdmin) {
-                    if (confirm('Are you sure you want to delete this user?')) {
-                        deleteUser(userId);
-                    }
-                } else {
-                    alert('You do not have permission to delete users.');
+                if (confirm('Are you sure you want to delete this user?')) {
+                    deleteUser(userId);
                 }
-            }
+            };
             return deleteButton;
         }
         function signOut() {
             var requestOptions = {
-            method: 'POST',
             mode: 'cors',
             cache: 'no-cache',
             credentials: 'include',
@@ -214,16 +215,18 @@ permalink: /account
             },
             redirect: 'follow',
             };
-            fetch("https://asl.stu.nighthawkcodingsociety.com/api/person/logout", requestOptions)
+            fetch("https://asl.stu.nighthawkcodingsociety.com/logout", requestOptions)
             .then(response => {
                 if (!response.ok) {
                 const errorMsg = 'Sign Out error: ' + response.status;
                 console.log(errorMsg);
                 alert("Sign Out failed. Please try again.");
                 return Promise.reject('Sign Out failed');
+                } else {
+                    alert("Sign Out successful");
+                    document.cookie.split(";").forEach(function(c) { document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/"); });
+                    window.location.href = "{{site.baseurl}}/login";
                 }
-                alert("Sign Out successful");
-                window.location.href = "{{site.baseurl}}/login";
             })
             .catch(error => console.log('error', error));
         }
