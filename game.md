@@ -175,7 +175,7 @@ permalink: /game
     const userName = sessionStorage.getItem('userName'); // Assuming the username is stored in session storage
     const token = sessionStorage.getItem('token'); // Assuming the token is stored in session storage
 
-    fetch(`http://localhost:8085/api/leaderboard/update/${userName}/${score}/${streak}`, {
+    fetch(`https://asl.stu.nighthawkcodingsociety.com/api/leaderboard/update/${userName}/${score}/${streak}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

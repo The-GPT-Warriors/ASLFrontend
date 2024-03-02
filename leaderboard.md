@@ -53,7 +53,7 @@ permalink: /leaderboard
   displayLeaderboard(exampleLeaderboardData);
 
   // Fetch dynamic data and display it
-  fetch('http://localhost:8085/api/leaderboard/')
+  fetch('https://asl.stu.nighthawkcodingsociety.com/api/leaderboard/')
     .then(response => response.json())
     .then(data => {
       displayLeaderboard(data); // Replace static data with dynamic data

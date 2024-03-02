@@ -35,7 +35,7 @@ permalink: /login
         body: raw,
         redirect: 'follow'
     };
-    fetch("http://localhost:8085/authenticate", requestOptions)
+    fetch("https://asl.stu.nighthawkcodingsociety.com/authenticate", requestOptions)
     .then(response => {
         if (!response.ok) {
             const errorMsg = 'Login error: ' + response.status;
