@@ -22,13 +22,6 @@ permalink: /leaderboard
 </div>
 
 <script>
-  // Commenting out static data
-  // const exampleLeaderboardData = [
-  //   { playerName: "Tay Kim", score: 100, recentStreak: 2 },
-  //   { playerName: "Ethan Tran", score: 90, recentStreak: 0 },
-  //   { playerName: "Anthony Bazhenov", score: 70, recentStreak: 3 },
-  //   { playerName: "Test", score: 50, recentStreak: 1 }
-  // ];
 
   function displayLeaderboard(data) {
     const leaderboardTable = document.getElementById('leaderboardTable').getElementsByTagName('tbody')[0];
@@ -46,13 +39,15 @@ permalink: /leaderboard
       streakCell.innerHTML = player.recentStreak;
     });
   }
+  // Display static data immediately
+  displayLeaderboard(exampleLeaderboardData);
 
   // Fetch dynamic data and display it
-  fetch('http://localhost:8085/api/leaderboard/')
+  fetch('https://asl.stu.nighthawkcodingsociety.com/api/leaderboard/')
+
     .then(response => response.json())
     .then(fetchedData => {
-      // No more combination with static data
-      displayLeaderboard(fetchedData); // Display only fetched data
+      displayLeaderboard(fetchedData);
     })
     .catch(error => {
       console.error('Error fetching leaderboard:', error);

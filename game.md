@@ -178,30 +178,29 @@ permalink: /game
   }
 
   function updateLeaderboard(score, streak) {
-  // Fetch username from session storage
-    const userName = sessionStorage.getItem('userName');
-    const token = sessionStorage.getItem('token');
+    const userName = sessionStorage.getItem('userName'); // Assuming the username is stored in session storage
+    const token = sessionStorage.getItem('token'); // Assuming the token is stored in session storage
 
-  fetch(`http://localhost:8085/api/leaderboard/update/${encodeURIComponent(userName)}/${score}/${streak}`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`
-    },
-    body: JSON.stringify({ score: score, streak: streak })
-  })
-  .then(response => {
-    if (!response.ok) {
-      throw new Error('Failed to update leaderboard');
-    }
-    return response.json();
-  })
-  .then(data => {
-    console.log('Leaderboard updated:', data);
-    // Trigger a refresh of the leaderboard display here if needed
-  })
-  .catch(error => console.error('Error updating leaderboard:', error));
-}
+    fetch(`https://asl.stu.nighthawkcodingsociety.com/api/leaderboard/update/${encodeURIComponent(userName)}/${score}/${streak}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+      body: JSON.stringify({score: score, streak: streak})
+    })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error(`Failed to update leaderboard: ${response.statusText}`);
+      }
+      return response.json();
+    })
+    .then(data => {
+      console.log('Leaderboard updated:', data);
+      // Optionally refresh the leaderboard page or notify the user
+    })
+    .catch(error => console.error('Error updating leaderboard:', error));
+  }
 </script>
 
 <style>

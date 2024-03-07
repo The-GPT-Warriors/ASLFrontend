@@ -25,7 +25,7 @@
             // get base64 representation of the image data
             const imageData = canvas.toDataURL('image/png').replace(/^data:image\/\w+;base64,/, '');
             // send image data to backend
-            fetch('http://localhost:8085/image', {
+            fetch('https://asl.stu.nighthawkcodingsociety.com/image', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
